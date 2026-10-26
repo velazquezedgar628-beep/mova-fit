@@ -30,21 +30,23 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .perspective-card { perspective: 1000px; }
-        .card-3d-content { transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); transform-style: preserve-3d; }
-        .card-3d-content:hover { transform: translateY(-8px) rotateX(4deg) rotateY(-4deg); }
+        .perspective-container { perspective: 1200px; }
+        .immersive-card { transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-style: preserve-3d; }
+        .immersive-card:hover { transform: translateY(-10px) rotateX(3deg) rotateY(-3deg) scale(1.02); }
+        .exploded-layer { transition: transform 0.4s ease; }
+        .immersive-card:hover .exploded-layer { transform: translateY(-6px) scale(1.05); }
     </style>
 </head>
 <body class="bg-white text-slate-900 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
 
     <!-- MODAL DE AUTENTICACIÓN / BIENVENIDA -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md flex items-center justify-center p-4">
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-md w-full p-8 shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
             
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <span class="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">MOVA</span>
-                <p class="text-slate-500 text-sm mt-1">Ecosistema Inmersivo de Nutrición & Rendimiento</p>
+                <p class="text-slate-500 text-sm mt-1">Ecosistema Inmersivo de Rendimiento</p>
             </div>
 
             <div class="flex bg-slate-100 p-1 rounded-xl mb-6 border border-slate-200">
@@ -118,7 +120,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Elige tu Avatar (Estilo 3D Inmersivo)</label>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">Elige tu Avatar 3D</label>
                     <div class="grid grid-cols-5 gap-2" id="avatar-selector"></div>
                 </div>
 
@@ -138,7 +140,7 @@
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-emerald-600/20">M</div>
                 <div>
                     <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">MOVA</span>
-                    <span class="block text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Experiencia Inmersiva</span>
+                    <span class="block text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Inmersive Experience</span>
                 </div>
             </div>
 
@@ -168,51 +170,47 @@
     </header>
 
     <main class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8">
-        <!-- SECCIÓN TIENDA / INICIO CON ENTRADAS VISIBLES -->
+        <!-- SECCIÓN TIENDA / INICIO -->
         <div id="section-store" class="space-y-12">
-            <!-- Hero Inmersivo Estilo 3D / Scroll Narrativo -->
-            <div class="relative bg-gradient-to-r from-emerald-50 via-teal-50 to-slate-50 border border-emerald-500/20 rounded-3xl p-8 md:p-12 overflow-hidden shadow-sm">
+            <!-- Hero Inmersivo -->
+            <div class="relative bg-gradient-to-br from-emerald-50 via-teal-50 to-white border border-emerald-500/20 rounded-3xl p-8 md:p-12 overflow-hidden shadow-sm">
                 <div class="max-w-2xl relative z-10">
-                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-200">Innovación MOVA 2026</span>
+                    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-200">Innovación 3D & 360°</span>
                     <h1 class="text-3xl md:text-5xl font-black text-slate-900 mt-4 tracking-tight">Nutrición de Élite & Viandas Inteligentes</h1>
-                    <p class="text-slate-600 mt-3 text-sm md:text-base">Explora nuestra tecnología en suplementación y menús personalizados con experiencias visuales interactivas.</p>
+                    <p class="text-slate-600 mt-3 text-sm md:text-base">Interactúa con nuestras vistas de despiece (Exploded View) para inspeccionar la pureza de cada fórmula.</p>
                 </div>
             </div>
 
-            <!-- DOS ACCESOS DIRECTOS PRINCIPALES -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div onclick="scrollToSection('supplements-anchor')" class="group perspective-card cursor-pointer">
-                    <div class="card-3d-content bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-8 text-white shadow-xl">
-                        <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6 text-2xl"><i class="fa-solid fa-cube"></i></div>
-                        <h2 class="text-2xl font-black">Productos Nutricionales</h2>
-                        <p class="text-emerald-100 text-sm mt-2">Descubre los suplementos con vista interactiva y desglose de componentes.</p>
-                        <span class="inline-flex items-center mt-6 text-xs font-bold uppercase tracking-wider bg-white/20 px-4 py-2 rounded-xl group-hover:bg-white group-hover:text-emerald-700 transition">Explorar con Vista 360 &rarr;</span>
-                    </div>
+            <!-- Accesos Directos Inmersivos 3D -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 perspective-container">
+                <div onclick="scrollToSection('supplements-anchor')" class="immersive-card bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-8 text-white cursor-pointer shadow-xl">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-6 text-2xl"><i class="fa-solid fa-cube"></i></div>
+                    <h2 class="text-2xl font-black">Productos Nutricionales</h2>
+                    <p class="text-emerald-100 text-sm mt-2">Inspecciona componentes moleculares y de pureza con un solo clic.</p>
+                    <span class="inline-flex items-center mt-6 text-xs font-bold uppercase tracking-wider bg-white/20 px-4 py-2 rounded-xl">Explorar Catálogo 3D &rarr;</span>
                 </div>
 
-                <div onclick="switchTab('menus')" class="group perspective-card cursor-pointer">
-                    <div class="card-3d-content bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 text-white shadow-xl border border-slate-700">
-                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 text-2xl"><i class="fa-solid fa-utensils"></i></div>
-                        <h2 class="text-2xl font-black">Menús & Viandas Fit</h2>
-                        <p class="text-slate-300 text-sm mt-2">Elige entre la línea Fit y la línea Low Carb con selección directa.</p>
-                        <span class="inline-flex items-center mt-6 text-xs font-bold uppercase tracking-wider bg-emerald-600 px-4 py-2 rounded-xl group-hover:bg-emerald-500 transition">Ver Líneas de Menús &rarr;</span>
-                    </div>
+                <div onclick="switchTab('menus')" class="immersive-card bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 text-white cursor-pointer shadow-xl border border-slate-700">
+                    <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mb-6 text-2xl"><i class="fa-solid fa-utensils"></i></div>
+                    <h2 class="text-2xl font-black">Menús & Viandas Fit</h2>
+                    <p class="text-slate-300 text-sm mt-2">Selección directa entre línea Fit y Low Carb preparadas por chefs.</p>
+                    <span class="inline-flex items-center mt-6 text-xs font-bold uppercase tracking-wider bg-emerald-600 px-4 py-2 rounded-xl">Ver Líneas de Menús &rarr;</span>
                 </div>
             </div>
 
-            <!-- SUPLEMENTOS CON RECURSO EXPLODED VIEW / 360 INTERACTIVO -->
+            <!-- SUPLEMENTOS CON EXPLODED VIEW -->
             <div id="supplements-anchor" class="pt-8">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-cubes text-emerald-600"></i> Suplementos (Vista Despiece / 360°)
                     </h2>
-                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">Haz clic en "Ver Despiece" para inspeccionar componentes</span>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl">Haz clic en el icono de capas para ver el despiece 3D</span>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="supplements-catalog"></div>
             </div>
         </div>
 
-        <!-- SECCIÓN MENÚS (DIVIDIDA EN FIT Y LOW CARB) -->
+        <!-- SECCIÓN MENÚS -->
         <div id="section-menus" class="space-y-8 hidden">
             <div class="text-center max-w-xl mx-auto mb-8">
                 <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest">Selección Gastronómica</span>
@@ -327,7 +325,7 @@
         </div>
     </main>
 
-    <!-- MODAL DE VISTA INMERSIVA / EXPLODED VIEW -->
+    <!-- MODAL EXPLODED VIEW -->
     <div id="exploded-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
         <div class="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-8 shadow-2xl relative">
             <button onclick="closeExplodedModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-900 text-lg"><i class="fa-solid fa-xmark"></i></button>
@@ -585,7 +583,7 @@
 
         function renderSupplements() {
             document.getElementById('supplements-catalog').innerHTML = supplementsCatalog.map(s => `
-                <div class="bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition">
+                <div class="exploded-layer bg-slate-50 border border-slate-200 rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-xl transition">
                     <div>
                         <div class="flex items-center justify-between mb-3">
                             <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">${s.brand}</span>
@@ -597,8 +595,8 @@
                     <div class="mt-6 pt-4 border-t border-slate-200 flex items-center justify-between gap-2">
                         <span class="text-base font-black text-slate-900">$${s.price.toLocaleString()}</span>
                         <div class="flex gap-1.5">
-                            <button onclick="openExplodedView('${s.id}')" class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm" title="Vista Despiece / Inmersiva"><i class="fa-solid fa-layer-group"></i></button>
-                            <button onclick="addToCart('${s.id}', '${s.name}', ${s.price})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm">Agregar</button>
+                            <button onclick="openExplodedView('${s.id}')" class="bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm transition transform hover:scale-105" title="Vista Despiece / Inmersiva"><i class="fa-solid fa-layer-group"></i></button>
+                            <button onclick="addToCart('${s.id}', '${s.name}', ${s.price})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-2 rounded-xl text-[11px] font-bold shadow-sm transition transform hover:scale-105">Agregar</button>
                         </div>
                     </div>
                 </div>
