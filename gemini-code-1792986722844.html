@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVA | Nutrición, Suplementos y Viandas Fit</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mova: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            900: '#064e3b',
+                            dark: '#0f172a',
+                            card: '#1e293b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+    <!-- MODAL DE AUTENTICACIÓN / BIENVENIDA -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 to-teal-400"></div>
+            
+            <div class="text-center mb-8">
+                <span class="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">MOVA</span>
+                <p class="text-slate-400 text-sm mt-1">Ecosistema de Nutrición, Rendimiento y Salud</p>
+            </div>
+
+            <div class="flex bg-slate-950 p-1 rounded-xl mb-6 border border-slate-800">
+                <button onclick="switchAuthTab('login')" id="tab-login-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition bg-emerald-600 text-white shadow-lg">Iniciar Sesión</button>
+                <button onclick="switchAuthTab('register')" id="tab-register-btn" class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition text-slate-400 hover:text-white">Registrarse</button>
+            </div>
+
+            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Correo Electrónico</label>
+                    <input type="email" id="login-email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition" placeholder="tu@email.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Contraseña</label>
+                    <input type="password" id="login-password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/25 transition">Ingresar a MOVA</button>
+            </form>
+
+            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nombre</label>
+                        <input type="text" id="reg-name" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500" placeholder="Tu nombre">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email</label>
+                        <input type="email" id="reg-email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500" placeholder="correo@email.com">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Contraseña</label>
+                        <input type="password" id="reg-password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500" placeholder="••••••••">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sexo</label>
+                        <select id="reg-sex" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="X">Otro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Peso (kg)</label>
+                        <input type="number" id="reg-weight" step="0.1" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" placeholder="75">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Estatura (cm)</label>
+                        <input type="number" id="reg-height" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-emerald-500" placeholder="175">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Actividad</label>
+                        <select id="reg-activity" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-2 py-2 text-xs focus:outline-none focus:border-emerald-500">
+                            <option value="1.2">Sedentario</option>
+                            <option value="1.375">Ligera</option>
+                            <option value="1.55" selected>Moderada</option>
+                            <option value="1.725">Intensa</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Objetivo Personal</label>
+                    <select id="reg-goal" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500">
+                        <option value="Musculación">Aumento de Masa Muscular</option>
+                        <option value="Pérdida de Peso">Pérdida de Peso / Definición</option>
+                        <option value="Rendimiento">Rendimiento y Energía Diaria</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Elige tu Avatar (Tribu / Estilo)</label>
+                    <div class="grid grid-cols-5 gap-2" id="avatar-selector"></div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/25 transition mt-2">Crear Cuenta y Comenzar</button>
+            </form>
+
+            <div class="mt-6 text-center">
+                <button onclick="loginAsGuest()" class="text-xs text-slate-400 hover:text-emerald-400 transition underline">Continuar como Invitado (Explorar sin cuenta)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 text-xl shadow-lg shadow-emerald-500/20">M</div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">MOVA</span>
+                    <span class="block text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Performance & Viandas</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-1 bg-slate-950/60 p-1.5 rounded-2xl border border-slate-800/80">
+                <button onclick="switchTab('store')" id="nav-store" class="px-5 py-2 rounded-xl text-sm font-semibold transition bg-emerald-600 text-white shadow-md">Tienda & Menús</button>
+                <button onclick="switchTab('builder')" id="nav-builder" class="px-5 py-2 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-white">Armá tu Pack</button>
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="px-5 py-2 rounded-xl text-sm font-semibold transition text-slate-400 hover:text-white">Mi Dashboard</button>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="openCart()" class="relative bg-slate-900 hover:bg-slate-800 border border-slate-800 p-2.5 rounded-2xl transition flex items-center justify-center">
+                    <i class="fa-solid fa-cart-shopping text-emerald-400 text-lg"></i>
+                    <span id="cart-badge" class="absolute -top-1.5 -right-1.5 bg-emerald-500 text-slate-950 text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md">0</span>
+                </button>
+
+                <div class="flex items-center space-x-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-2xl">
+                    <div id="user-avatar-preview" class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center overflow-hidden border border-emerald-500/50"></div>
+                    <div class="hidden sm:block text-left pr-2">
+                        <div id="user-name-preview" class="text-xs font-bold text-slate-200">Usuario</div>
+                        <div id="user-goal-preview" class="text-[10px] text-emerald-400">Objetivo</div>
+                    </div>
+                    <button onclick="logout()" title="Cerrar Sesión" class="text-slate-400 hover:text-red-400 p-1 transition"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8">
+        <!-- SECCIÓN TIENDA -->
+        <div id="section-store" class="space-y-12">
+            <div class="relative bg-gradient-to-r from-emerald-900/40 via-teal-900/30 to-slate-900 border border-emerald-500/20 rounded-3xl p-8 overflow-hidden shadow-2xl">
+                <div class="max-w-2xl relative z-10">
+                    <span class="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest border border-emerald-500/30">Lanzamiento Oficial</span>
+                    <h1 class="text-3xl md:text-5xl font-black text-white mt-4 tracking-tight">Nutrición de Élite & Viandas Inteligentes</h1>
+                    <p class="text-slate-300 mt-3 text-sm md:text-base">Combina nuestra línea de suplementación científica con viandas preparadas por chefs para maximizar tu composición corporal.</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-bold tracking-tight text-white mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-emerald-400"></i> Suplementos Nutricionales
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="supplements-catalog"></div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-900">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <h2 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                        <i class="fa-solid fa-utensils text-teal-400"></i> Línea de Viandas (Fit & Low Carb)
+                    </h2>
+                    <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+                        <button onclick="filterMenus('all')" id="filter-all" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white transition">Todos (20)</button>
+                        <button onclick="filterMenus('fit')" id="filter-fit" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">Línea Fit (10)</button>
+                        <button onclick="filterMenus('lowcarb')" id="filter-lowcarb" class="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">Low Carb (10)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 flex items-center justify-between">
+                        <div>
+                            <span class="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Pack Promocional</span>
+                            <h3 class="text-lg font-bold text-white mt-2">Pack 5 Viandas Express</h3>
+                            <p class="text-xs text-slate-400 mt-1">10% de ahorro directo.</p>
+                            <span class="text-emerald-400 font-extrabold text-lg mt-3 block">$28,500</span>
+                        </div>
+                        <button onclick="addPackToCart(5)" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-xl font-bold text-xs">Agregar (5u)</button>
+                    </div>
+                    <div class="bg-slate-900 border border-teal-500/30 rounded-2xl p-6 flex items-center justify-between">
+                        <div>
+                            <span class="bg-teal-500/20 text-teal-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Pack Rendimiento</span>
+                            <h3 class="text-lg font-bold text-white mt-2">Pack 10 Viandas Selección Chef</h3>
+                            <p class="text-xs text-slate-400 mt-1">15% de ahorro.</p>
+                            <span class="text-teal-400 font-extrabold text-lg mt-3 block">$52,000</span>
+                        </div>
+                        <button onclick="addPackToCart(10)" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-3 rounded-xl font-bold text-xs">Agregar (10u)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="menus-grid"></div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN ARMÁ TU PACK -->
+        <div id="section-builder" class="space-y-8 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Constructor a Medida</span>
+                        <h2 class="text-2xl font-bold text-white mt-1">Armá tu Pack Personalizado (5 o 10 Unidades)</h2>
+                        <p class="text-xs text-slate-400">Incluye costo extra de armado de $2,500.</p>
+                    </div>
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button onclick="setBuilderSize(5)" id="btn-size-5" class="px-5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white transition">Pack de 5</button>
+                        <button onclick="setBuilderSize(10)" id="btn-size-10" class="px-5 py-2 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition">Pack de 10</button>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-2xl mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div>
+                        <div class="text-xs font-bold text-slate-300">Seleccionadas: <span id="builder-count" class="text-emerald-400 text-sm font-extrabold">0</span> / <span id="builder-target">5</span></div>
+                        <div class="w-48 bg-slate-900 h-2 rounded-full overflow-hidden mt-2">
+                            <div id="builder-progress-bar" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs text-slate-400">Total con Armado:</div>
+                        <div id="builder-total-price" class="text-lg font-black text-white">$0</div>
+                    </div>
+                    <button onclick="addCustomPackToCart()" id="btn-add-custom" disabled class="bg-slate-800 text-slate-500 cursor-not-allowed px-6 py-3 rounded-xl font-bold text-xs">Añadir al Carrito</button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="builder-catalog"></div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DASHBOARD -->
+        <div id="section-dashboard" class="space-y-8 hidden">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-xs font-bold text-slate-400 uppercase">IMC</div>
+                    <div id="dash-imc" class="text-2xl font-black text-emerald-400 mt-2">--</div>
+                    <div id="dash-imc-status" class="text-[10px] text-slate-500 mt-1">Calculado</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-xs font-bold text-slate-400 uppercase">Calorías Diarias</div>
+                    <div id="dash-calories" class="text-2xl font-black text-teal-400 mt-2">-- kcal</div>
+                    <div class="text-[10px] text-slate-500 mt-1">TDEE Ajustado</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-xs font-bold text-slate-400 uppercase">Objetivo</div>
+                    <div id="dash-goal-text" class="text-lg font-black text-white mt-2">--</div>
+                    <div class="text-[10px] text-emerald-400 mt-1">Plan MOVA</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                    <div class="text-xs font-bold text-slate-400 uppercase">Agua</div>
+                    <div class="text-2xl font-black text-sky-400 mt-2">3.2 L</div>
+                    <div class="w-full bg-slate-950 h-1.5 rounded-full mt-2 overflow-hidden"><div class="bg-sky-400 h-full w-[90%]"></div></div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-bold text-white">Evolución de Peso Corporal</h3>
+                    <button onclick="logNewWeight()" class="bg-slate-800 text-white px-4 py-2 rounded-xl text-xs font-bold border border-slate-700">Registrar Peso</button>
+                </div>
+                <div class="h-72 w-full"><canvas id="weightChart"></canvas></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OVER CARRITO -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex justify-end">
+        <div class="bg-slate-900 border-l border-slate-800 w-full max-w-md h-full flex flex-col shadow-2xl p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                <h3 class="text-lg font-bold text-white"><i class="fa-solid fa-cart-shopping text-emerald-400 mr-2"></i>Carrito MOVA</h3>
+                <button onclick="closeCart()" class="text-slate-400 hover:text-white p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div id="cart-items-container" class="flex-1 overflow-y-auto py-4 space-y-3 divide-y divide-slate-800/50"></div>
+            <div class="pt-4 border-t border-slate-800 space-y-4">
+                <div class="flex justify-between items-center text-sm"><span class="text-slate-400">Subtotal</span><span id="cart-subtotal" class="font-bold text-white">$0</span></div>
+                <div class="flex justify-between items-center text-sm"><span class="text-slate-400">Envío</span><span class="font-bold text-emerald-400">GRATIS</span></div>
+                <div class="flex justify-between items-center text-lg pt-2 border-t border-slate-800"><span class="font-bold text-white">Total</span><span id="cart-total" class="font-black text-emerald-400">$0</span></div>
+
+                <div>
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Método de Pago</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center space-x-2 cursor-pointer"><input type="radio" name="payment-method" value="mercadopago" checked><span class="text-xs text-white">Mercado Pago</span></label>
+                        <label class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center space-x-2 cursor-pointer"><input type="radio" name="payment-method" value="qr"><span class="text-xs text-white">Código QR</span></label>
+                        <label class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center space-x-2 cursor-pointer"><input type="radio" name="payment-method" value="card"><span class="text-xs text-white">Tarjetas</span></label>
+                        <label class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center space-x-2 cursor-pointer"><input type="radio" name="payment-method" value="transfer"><span class="text-xs text-white">Transferencia</span></label>
+                    </div>
+                </div>
+
+                <button onclick="checkout()" class="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl shadow-lg transition uppercase text-sm">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const avatars = [
+            { id: 1, name: 'Atleta', bg: 'from-emerald-500 to-teal-600', icon: 'fa-bolt' },
+            { id: 2, name: 'Techie', bg: 'from-blue-600 to-indigo-700', icon: 'fa-glasses' },
+            { id: 3, name: 'Gótico', bg: 'from-slate-800 to-slate-950', icon: 'fa-moon' },
+            { id: 4, name: 'Gamer', bg: 'from-purple-600 to-pink-600', icon: 'fa-headset' },
+            { id: 5, name: 'Biohacker', bg: 'from-cyan-500 to-blue-600', icon: 'fa-dna' },
+            { id: 6, name: 'Holístico', bg: 'from-emerald-700 to-green-800', icon: 'fa-leaf' },
+            { id: 7, name: 'Urbano', bg: 'from-amber-600 to-orange-700', icon: 'fa-hat-cowboy' },
+            { id: 8, name: 'Ejecutivo', bg: 'from-blue-900 to-slate-900', icon: 'fa-briefcase' },
+            { id: 9, name: 'Artista', bg: 'from-rose-500 to-orange-500', icon: 'fa-palette' },
+            { id: 10, name: 'Zen', bg: 'from-teal-700 to-emerald-900', icon: 'fa-spa' }
+        ];
+
+        let selectedAvatarId = 1;
+
+        const supplementsCatalog = [
+            { id: 'sup-1', brand: 'MOVA', name: 'Creatine Monohydrate 300g', price: 24500, category: 'Performance', desc: 'Micronizada para fuerza explosiva.', icon: 'fa-bolt' },
+            { id: 'sup-2', brand: 'MOVA', name: 'Whey Protein Isolate 1kg', price: 48000, category: 'Performance', desc: 'Proteína aislada con zero azúcar.', icon: 'fa-shaker' },
+            { id: 'sup-3', brand: 'MOVA', name: 'Pre-Workout Ignite 250g', price: 29000, category: 'Performance', desc: 'Energía sostenida.', icon: 'fa-fire' },
+            { id: 'sup-4', brand: 'MOVA', name: 'Multivitamin Complex', price: 18500, category: 'Daily', desc: 'Micronutrientes esenciales.', icon: 'fa-pills' },
+            { id: 'sup-5', brand: 'MOVA', name: 'Omega 3 Fish Oil', price: 21000, category: 'Daily', desc: 'EPA y DHA purificados.', icon: 'fa-fish' },
+            { id: 'sup-6', brand: 'MOVA', name: 'Magnesio quelatado', price: 16000, category: 'Daily', desc: 'Relajación y descanso.', icon: 'fa-moon' },
+            { id: 'sup-7', brand: 'MOVA', name: 'Glutamine Pure', price: 22000, category: 'Recovery', desc: 'Protección muscular.', icon: 'fa-shield-heart' },
+            { id: 'sup-8', brand: 'MOVA', name: 'ZMA Night Formula', price: 19500, category: 'Recovery', desc: 'Síntesis hormonal.', icon: 'fa-bed' }
+        ];
+
+        const menusCatalog = Array.from({ length: 20 }, (_, i) => {
+            const isFit = i < 10;
+            return {
+                id: `menu-${i+1}`,
+                name: isFit ? `Menú Fit #${i+1}` : `Low Carb #${i+1-10}`,
+                category: isFit ? 'fit' : 'lowcarb',
+                cal: Math.floor(Math.random() * 150) + 380,
+                protein: Math.floor(Math.random() * 15) + 32,
+                carb: isFit ? 35 : 8,
+                fat: 10,
+                price: 6500,
+                desc: isFit ? 'Balance perfecto de carbohidratos complejos.' : 'Bajo en carbohidratos, alto en proteínas.'
+            };
+        });
+
+        let currentUser = null;
+        let cart = [];
+        let builderSize = 5;
+        let customPackSelection = [];
+        let weightChartInstance = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAvatarsSelector();
+            checkSession();
+            renderSupplements();
+            renderMenus('all');
+            renderBuilderCatalog();
+        });
+
+        function renderAvatarsSelector() {
+            document.getElementById('avatar-selector').innerHTML = avatars.map(a => `
+                <div onclick="selectAvatar(${a.id})" class="h-12 rounded-xl bg-gradient-to-tr ${a.bg} flex items-center justify-center cursor-pointer border-2 ${selectedAvatarId === a.id ? 'border-emerald-400 scale-105' : 'border-transparent opacity-60'}">
+                    <i class="fa-solid ${a.icon} text-white text-sm"></i>
+                </div>
+            `).join('');
+        }
+
+        function selectAvatar(id) {
+            selectedAvatarId = id;
+            renderAvatarsSelector();
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('tab-login-btn').className = "flex-1 py-2.5 rounded-lg text-sm font-semibold transition bg-emerald-600 text-white shadow-lg";
+                document.getElementById('tab-register-btn').className = "flex-1 py-2.5 rounded-lg text-sm font-semibold transition text-slate-400";
+                document.getElementById('form-login').classList.remove('hidden');
+                document.getElementById('form-register').classList.add('hidden');
+            } else {
+                document.getElementById('tab-register-btn').className = "flex-1 py-2.5 rounded-lg text-sm font-semibold transition bg-emerald-600 text-white shadow-lg";
+                document.getElementById('tab-login-btn').className = "flex-1 py-2.5 rounded-lg text-sm font-semibold transition text-slate-400";
+                document.getElementById('form-register').classList.remove('hidden');
+                document.getElementById('form-login').classList.add('hidden');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            loginUser({ name: email.split('@')[0], email, weight: 75, height: 175, sex: 'M', activity: 1.55, goal: 'Musculación', history: [75] });
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const user = {
+                name: document.getElementById('reg-name').value,
+                email: document.getElementById('reg-email').value,
+                weight: parseFloat(document.getElementById('reg-weight').value),
+                height: parseFloat(document.getElementById('reg-height').value),
+                sex: document.getElementById('reg-sex').value,
+                activity: parseFloat(document.getElementById('reg-activity').value),
+                goal: document.getElementById('reg-goal').value,
+                avatarId: selectedAvatarId,
+                history: [parseFloat(document.getElementById('reg-weight').value)]
+            };
+            loginUser(user);
+        }
+
+        function loginUser(user) {
+            currentUser = user;
+            localStorage.setItem('mova_current_user', JSON.stringify(user));
+            document.getElementById('auth-modal').classList.add('hidden');
+            updateUserUI();
+            initDashboard();
+        }
+
+        function loginAsGuest() {
+            currentUser = { name: 'Invitado', email: 'invitado@mova.fit', weight: 70, height: 170, sex: 'M', activity: 1.55, goal: 'Rendimiento', history: [70] };
+            document.getElementById('auth-modal').classList.add('hidden');
+            updateUserUI();
+            initDashboard();
+        }
+
+        function checkSession() {
+            const saved = localStorage.getItem('mova_current_user');
+            if (saved) {
+                currentUser = JSON.parse(saved);
+                document.getElementById('auth-modal').classList.add('hidden');
+                updateUserUI();
+                initDashboard();
+            } else {
+                document.getElementById('auth-modal').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('mova_current_user');
+            currentUser = null;
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function updateUserUI() {
+            if (!currentUser) return;
+            const av = avatars.find(a => a.id === (currentUser.avatarId || 1));
+            document.getElementById('user-avatar-preview').className = `w-8 h-8 rounded-full bg-gradient-to-tr ${av.bg} flex items-center justify-center text-white`;
+            document.getElementById('user-avatar-preview').innerHTML = `<i class="fa-solid ${av.icon} text-xs"></i>`;
+            document.getElementById('user-name-preview').innerText = currentUser.name;
+            document.getElementById('user-goal-preview').innerText = currentUser.goal;
+        }
+
+        function switchTab(tab) {
+            ['store', 'builder', 'dashboard'].forEach(t => {
+                document.getElementById(`section-${t}`).classList.add('hidden');
+                document.getElementById(`nav-${t}`).className = "px-5 py-2 rounded-xl text-sm font-semibold transition text-slate-400";
+            });
+            document.getElementById(`section-${tab}`).classList.remove('hidden');
+            document.getElementById(`nav-${tab}`).className = "px-5 py-2 rounded-xl text-sm font-semibold transition bg-emerald-600 text-white shadow-md";
+            if (tab === 'dashboard') initDashboard();
+        }
+
+        function renderSupplements() {
+            document.getElementById('supplements-catalog').innerHTML = supplementsCatalog.map(s => `
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 flex flex-col justify-between shadow-lg">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">${s.brand}</span>
+                            <i class="fa-solid ${s.icon} text-emerald-400"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-white">${s.name}</h3>
+                        <p class="text-xs text-slate-400 mt-2">${s.desc}</p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between">
+                        <span class="text-lg font-black text-white">$${s.price.toLocaleString()}</span>
+                        <button onclick="addToCart('${s.id}', '${s.name}', ${s.price})" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold">Agregar</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderMenus(filter) {
+            ['all', 'fit', 'lowcarb'].forEach(f => {
+                document.getElementById(`filter-${f}`).className = f === filter ? "px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-4 py-1.5 rounded-lg text-xs font-bold text-slate-400";
+            });
+            const filtered = filter === 'all' ? menusCatalog : menusCatalog.filter(m => m.category === filter);
+            document.getElementById('menus-grid').innerHTML = filtered.map(m => `
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 flex flex-col justify-between shadow-lg">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[10px] font-bold uppercase ${m.category === 'fit' ? 'text-emerald-400' : 'text-teal-400'}">${m.category}</span>
+                            <span class="text-xs text-slate-400">${m.cal} kcal</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white">${m.name}</h4>
+                        <p class="text-[11px] text-slate-400 mt-1">${m.desc}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between">
+                        <span class="text-base font-black text-white">$${m.price.toLocaleString()}</span>
+                        <button onclick="addToCart('${m.id}', '${m.name}', ${m.price})" class="bg-teal-600 text-white px-3 py-2 rounded-xl text-xs font-bold">Añadir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setBuilderSize(size) {
+            builderSize = size;
+            customPackSelection = [];
+            document.getElementById('btn-size-5').className = size === 5 ? "px-5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-5 py-2 rounded-lg text-xs font-bold text-slate-400";
+            document.getElementById('btn-size-10').className = size === 10 ? "px-5 py-2 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-5 py-2 rounded-lg text-xs font-bold text-slate-400";
+            document.getElementById('builder-target').innerText = size;
+            renderBuilderCatalog();
+            updateBuilderUI();
+        }
+
+        function renderBuilderCatalog() {
+            document.getElementById('builder-catalog').innerHTML = menusCatalog.map(m => {
+                const count = customPackSelection.filter(id => id === m.id).length;
+                return `
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+                        <div><h5 class="text-xs font-bold text-white">${m.name}</h5></div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="modifyCustomPack('${m.id}', -1)" class="w-7 h-7 bg-slate-900 rounded-lg text-white font-bold">-</button>
+                            <span class="text-xs font-black text-white w-4 text-center">${count}</span>
+                            <button onclick="modifyCustomPack('${m.id}', 1)" class="w-7 h-7 bg-emerald-600 rounded-lg text-white font-bold">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function modifyCustomPack(id, delta) {
+            if (delta > 0) {
+                if (customPackSelection.length >= builderSize) return;
+                customPackSelection.push(id);
+            } else {
+                const idx = customPackSelection.indexOf(id);
+                if (idx > -1) customPackSelection.splice(idx, 1);
+            }
+            renderBuilderCatalog();
+            updateBuilderUI();
+        }
+
+        function updateBuilderUI() {
+            const count = customPackSelection.length;
+            document.getElementById('builder-count').innerText = count;
+            document.getElementById('builder-progress-bar').style.width = `${(count / builderSize) * 100}%`;
+            document.getElementById('builder-total-price').innerText = `$${(count * 6200 + (count > 0 ? 2500 : 0)).toLocaleString()}`;
+            const btn = document.getElementById('btn-add-custom');
+            btn.disabled = count !== builderSize;
+            btn.className = count === builderSize ? "bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold text-xs cursor-pointer" : "bg-slate-800 text-slate-500 cursor-not-allowed px-6 py-3 rounded-xl font-bold text-xs";
+        }
+
+        function addCustomPackToCart() {
+            if (customPackSelection.length !== builderSize) return;
+            cart.push({ id: 'custom-' + Date.now(), name: `Pack Custom (${builderSize}u)`, price: builderSize * 6200 + 2500, qty: 1 });
+            customPackSelection = [];
+            renderBuilderCatalog();
+            updateBuilderUI();
+            updateCartBadge();
+            openCart();
+        }
+
+        function addToCart(id, name, price) {
+            const item = cart.find(i => i.id === id);
+            if (item) item.qty++;
+            else cart.push({ id, name, price, qty: 1 });
+            updateCartBadge();
+        }
+
+        function addPackToCart(units) {
+            cart.push({ id: `pack-${units}-${Date.now()}`, name: `Pack ${units} Viandas`, price: units === 10 ? 52000 : 28500, qty: 1 });
+            updateCartBadge();
+            openCart();
+        }
+
+        function updateCartBadge() {
+            document.getElementById('cart-badge').innerText = cart.reduce((a, b) => a + b.qty, 0);
+        }
+
+        function openCart() {
+            const container = document.getElementById('cart-items-container');
+            if (cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-500 text-xs">Carrito vacío</div>`;
+                document.getElementById('cart-subtotal').innerText = '$0';
+                document.getElementById('cart-total').innerText = '$0';
+            } else {
+                let sub = 0;
+                container.innerHTML = cart.map((item, idx) => {
+                    sub += item.price * item.qty;
+                    return `<div class="py-3 flex justify-between items-center text-xs"><div><strong class="text-white">${item.name}</strong><div class="text-slate-400">$${item.price} x ${item.qty}</div></div><button onclick="cart.splice(${idx},1);updateCartBadge();openCart();" class="text-red-400"><i class="fa-solid fa-trash"></i></button></div>`;
+                }).join('');
+                document.getElementById('cart-subtotal').innerText = `$${sub.toLocaleString()}`;
+                document.getElementById('cart-total').innerText = `$${sub.toLocaleString()}`;
+            }
+            document.getElementById('cart-drawer').classList.remove('hidden');
+        }
+
+        function closeCart() { document.getElementById('cart-drawer').classList.add('hidden'); }
+        function checkout() { alert('¡Pedido realizado con éxito!'); cart = []; updateCartBadge(); closeCart(); switchTab('dashboard'); }
+
+        function initDashboard() {
+            if (!currentUser) return;
+            const imc = (currentUser.weight / Math.pow(currentUser.height/100, 2)).toFixed(1);
+            document.getElementById('dash-imc').innerText = imc;
+            document.getElementById('dash-calories').innerText = `${Math.round(((10 * currentUser.weight) + (6.25 * currentUser.height) - 25 * 25 + 5) * currentUser.activity)} kcal`;
+            document.getElementById('dash-goal-text').innerText = currentUser.goal;
+
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            if (weightChartInstance) weightChartInstance.destroy();
+            weightChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: currentUser.history.map((_, i) => `Semana ${i+1}`), datasets: [{ data: currentUser.history, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true, tension: 0.3 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }, y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } } } }
+            });
+        }
+
+        function logNewWeight() {
+            const nw = prompt('Peso actual (kg):', currentUser.weight);
+            if (nw && !isNaN(nw)) { currentUser.weight = parseFloat(nw); currentUser.history.push(currentUser.weight); localStorage.setItem('mova_current_user', JSON.stringify(currentUser)); initDashboard(); }
+        }
+    </script>
+</body>
+</html>
