@@ -1,303 +1,826 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOVA | Sistema de Autenticación & Avatares</title>
+    <title>MOVA · Nutrición, Ciencia & Movimiento</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Syne & Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Syne, Plus Jakarta Sans, Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        syne: ['Syne', 'sans-serif'],
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
                     colors: {
                         mova: {
-                            50: '#f0fdf4',
-                            100: '#dcfce7',
-                            500: '#10b981',
-                            600: '#059669',
-                            700: '#047857',
-                            dark: '#0a0f0d'
+                            dark: '#0a0d0c',
+                            deep: '#121715',
+                            card: '#18201c',
+                            emerald: '#10b981',
+                            cream: '#f4f1ea',
+                            creamHover: '#e5e0d3',
+                            muted: '#9ca3af'
                         }
+                    },
+                    fontFamily: {
+                        brand: ['Syne', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif']
                     }
                 }
             }
         }
     </script>
     <style>
-        .mova-brand { font-family: 'Syne', sans-serif; font-weight: 800; }
-        .avatar-card { transition: all 0.25s ease; }
-        .avatar-card:hover { transform: translateY(-3px); }
-        .avatar-card.selected { border-color: #10b981; background-color: #f0fdf4; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25); }
+        /* Custom Scrollbar & Snap styling */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .snap-carousel {
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+        .snap-card {
+            scroll-snap-align: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+        
+        /* Hero background mirroring exact gym photography overlay */
+        .bg-mova-hero {
+            background: linear-gradient(180deg, rgba(10, 13, 12, 0.40) 0%, rgba(10, 13, 12, 0.75) 60%, rgba(10, 13, 12, 1) 100%),
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        .glass-panel {
+            background: rgba(20, 26, 23, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans justify-center items-center p-4">
+<body class="bg-mova-dark text-mova-cream font-sans min-h-full flex flex-col antialiased selection:bg-mova-emerald selection:text-mova-dark">
 
-    <!-- MODAL DE AUTENTICACIÓN Y REGISTRO MOVA -->
-    <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl my-8 relative overflow-hidden text-slate-100">
-            <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600"></div>
-            
-            <!-- Encabezado de Marca -->
-            <div class="text-center mb-6">
-                <span class="mova-brand text-4xl tracking-widest text-white">M O V A <span class="text-emerald-500">.</span></span>
-                <p class="text-slate-400 text-xs mt-1 font-semibold uppercase tracking-wider">Nutrición · Ciencia · Movimiento</p>
-            </div>
-
-            <!-- Selector de Pestañas: Login / Registro -->
-            <div class="flex bg-slate-800/80 p-1 rounded-2xl mb-6 border border-slate-700/60">
-                <button type="button" onclick="switchTab('login')" id="btn-tab-login" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-md">Iniciar Sesión</button>
-                <button type="button" onclick="switchTab('register')" id="btn-tab-register" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">Registrarse</button>
-            </div>
-
-            <!-- FORMULARIO 1: INICIAR SESIÓN -->
-            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Correo Electrónico</label>
-                    <input type="email" id="login-email" required class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition" placeholder="tu@email.com">
+    <!-- REQUERIMIENTO 4: BARRA SUPERIOR CONTROLADA CON USUARIO Y CONTROLES -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-mova-dark/80 backdrop-blur-md border-b border-white/5 px-4 lg:px-8 py-3.5 flex items-center justify-between transition-all duration-300">
+        <!-- Izquierda: Perfil / Avatar -->
+        <div class="flex items-center space-x-3">
+            <button onclick="switchTab(2)" class="flex items-center space-x-2.5 bg-white/5 hover:bg-white/10 p-1.5 pr-3 rounded-full border border-white/10 transition group text-left">
+                <div class="w-8 h-8 rounded-full bg-mova-emerald/30 border border-mova-emerald flex items-center justify-center text-mova-emerald font-bold text-xs" id="userAvatar">
+                    AR
                 </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Contraseña</label>
-                    <input type="password" id="login-password" required class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-emerald-500 transition" placeholder="••••••••">
+                <div class="hidden sm:block text-xs">
+                    <p class="font-semibold text-mova-cream leading-none group-hover:text-mova-emerald transition" id="headerUserName">Arnaldo R.</p>
+                    <p class="text-[10px] text-mova-muted leading-tight mt-0.5" id="headerUserGoal">Mantenimiento FIT</p>
                 </div>
+            </button>
+        </div>
+
+        <!-- Centro: Marca M O V A . -->
+        <div class="text-center cursor-pointer" onclick="switchTab(0)">
+            <h1 class="font-brand font-extrabold text-2xl lg:text-3xl tracking-widest text-mova-cream uppercase inline-block">
+                M O V A <span class="text-mova-emerald text-xl sm:text-2xl">.</span>
+            </h1>
+        </div>
+
+        <!-- Derecha: Carrito, Ajustes y Cierre de Sesión -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-mova-cream hover:text-mova-emerald transition">
+                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                <span id="cartBadge" class="absolute -top-1 -right-1 bg-mova-emerald text-mova-dark text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+                    0
+                </span>
+            </button>
+
+            <button onclick="switchTab(2)" class="p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-mova-cream hover:text-mova-emerald transition hidden sm:flex">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+            </button>
+
+            <button onclick="openAuthModal()" title="Cerrar / Cambiar Sesión" class="p-2.5 rounded-full bg-white/5 hover:bg-rose-500/20 hover:text-rose-400 border border-white/10 text-mova-cream transition">
+                <i data-lucide="log-out" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- HERO DE MÁXIMA FIDELIDAD VISUAL A LA CAPTURA DE REFERENCIA -->
+    <section class="relative min-h-[92vh] flex flex-col justify-between pt-28 pb-12 px-6 sm:px-12 bg-mova-hero border-b border-white/10">
+        
+        <!-- Botón superior derecho tipo capsula cristal de la captura -->
+        <div class="flex justify-end w-full max-w-6xl mx-auto">
+            <button onclick="switchTab(0)" class="glass-pill px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium text-mova-cream hover:bg-white/15 transition flex items-center space-x-2">
+                <span>Explorar MOVA</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-mova-cream/80"></i>
+            </button>
+        </div>
+
+        <!-- Bloque central de texto idéntico al diseño proporcionado -->
+        <div class="max-w-xl mx-auto w-full my-auto py-8">
+            <!-- Subtítulo con espaciado amplio -->
+            <p class="text-[11px] sm:text-xs font-semibold tracking-[0.35em] text-mova-cream/80 uppercase mb-6">
+                NUTRICIÓN · CIENCIA · MOVIMIENTO
+            </p>
+
+            <!-- Titular exacto: Tu cuerpo. / Tu siguiente / versión. -->
+            <h2 class="font-sans font-extrabold text-5xl sm:text-7xl text-mova-cream leading-[0.98] tracking-tight mb-6">
+                Tu cuerpo.<br>
+                Tu siguiente<br>
+                <span class="font-serif italic font-normal text-white drop-shadow-md">versión.</span>
+            </h2>
+
+            <!-- Texto descriptivo en blanco limpio -->
+            <p class="text-mova-cream/90 text-sm sm:text-base font-light leading-relaxed mb-8 max-w-lg">
+                Un ecosistema de nutrición inteligente donde cada ingrediente, cada elección y cada hábito trabajan en la misma dirección.
+            </p>
+
+            <!-- Botones estilo píldora de la captura -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">
+                <!-- Botón Crema Sólido con Flecha -->
+                <button onclick="switchTab(0)" class="bg-mova-cream hover:bg-mova-creamHover text-mova-dark font-semibold px-8 py-4 rounded-xl sm:rounded-2xl transition flex items-center justify-between sm:justify-center space-x-3 text-sm shadow-xl">
+                    <span>Explorar la fórmula</span>
+                    <i data-lucide="arrow-down-right" class="w-4 h-4"></i>
+                </button>
                 
-                <div id="login-error" class="text-red-400 text-xs font-bold text-center hidden">Email o contraseña incorrectos.</div>
+                <!-- Botón Cristal Contorno -->
+                <button onclick="switchTab(1)" class="glass-pill hover:bg-white/15 text-mova-cream font-medium px-8 py-4 rounded-xl sm:rounded-2xl transition flex items-center justify-center text-sm">
+                    <span>Descubrir viandas</span>
+                </button>
+            </div>
+        </div>
 
-                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl shadow-lg shadow-emerald-600/30 transition uppercase text-xs tracking-wider">Ingresar a MOVA</button>
-            </form>
+        <!-- Gradiente de transición inferior -->
+        <div class="w-full text-center">
+            <button onclick="switchTab(0)" class="text-mova-muted hover:text-mova-cream text-xs flex items-center justify-center space-x-1 mx-auto transition">
+                <span>Deslizar para explorar el ecosistema</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 animate-bounce"></i>
+            </button>
+        </div>
+    </section>
 
-            <!-- FORMULARIO 2: REGISTRO DE USUARIO -->
-            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-                <div>
-                    <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Correo Electrónico</label>
-                    <input type="email" id="reg-email" required class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="tu@email.com">
-                </div>
+    <!-- REQUERIMIENTO 2: DASHBOARD CON 3 PESTAÑAS DESLIZABLES HORIZONTALMENTE -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 flex flex-col justify-center">
+        
+        <!-- Selector Navegador -->
+        <div class="flex justify-center mb-8">
+            <div class="glass-panel p-1.5 rounded-full flex items-center space-x-1 sm:space-x-2">
+                <button id="navTab0" onclick="switchTab(0)" class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 bg-mova-emerald text-mova-dark shadow-md">
+                    1. Suplementos Nutricionales
+                </button>
+                <button id="navTab1" onclick="switchTab(1)" class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 text-mova-cream/70 hover:text-mova-cream">
+                    2. Menús Fit & Low Carb
+                </button>
+                <button id="navTab2" onclick="switchTab(2)" class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 text-mova-cream/70 hover:text-mova-cream">
+                    3. Datos de Perfil
+                </button>
+            </div>
+        </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Contraseña</label>
-                        <input type="password" id="reg-password" required class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="••••••••">
+        <!-- Carousel Horizontal con Zoom / Escala -->
+        <div id="carouselContainer" class="snap-carousel hide-scrollbar flex overflow-x-auto gap-6 sm:gap-8 pb-8 pt-2 items-center">
+            
+            <!-- PESTAÑA 1: SUPLEMENTOS NUTRICIONALES -->
+            <div id="card0" class="snap-card min-w-[90vw] sm:min-w-[80vw] lg:min-w-[1000px] flex-shrink-0 transition-all duration-300">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2">
+                        <div>
+                            <span class="text-xs font-bold text-mova-emerald uppercase tracking-widest">Línea de Rendimiento</span>
+                            <h3 class="text-2xl sm:text-3xl font-brand font-bold text-mova-cream mt-0.5">Suplementación Inteligente</h3>
+                        </div>
+                        <p class="text-xs text-mova-muted max-w-xs">Fórmulas limpias, biodisponibles y respaldadas por evidencia científica.</p>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Repetir Contraseña</label>
-                        <input type="password" id="reg-confirm" required class="w-full bg-slate-800/60 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" placeholder="••••••••">
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Producto 1 -->
+                        <div class="bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-mova-emerald/20 text-mova-emerald text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-mova-emerald/30">PRE-WORKOUT</span>
+                                    <i data-lucide="zap" class="w-20 h-20 text-mova-emerald/40 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">MOVA Focus & Power</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Fórmula nootrópica con Citrulina Malato, Beta-Alanina y Cafeína anhidra.</p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-mova-muted block">Envase 400g</span>
+                                    <span class="text-lg font-bold text-mova-cream">$24.500</span>
+                                </div>
+                                <button onclick="addToCart('MOVA Focus & Power', 24500)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Producto 2 -->
+                        <div class="bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-amber-500/20 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-amber-500/30">PROTEÍNA</span>
+                                    <i data-lucide="shield-check" class="w-20 h-20 text-amber-400/40 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">IsoPure Hydro Whey</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Proteína hidrolizada aislada de máxima absorción con BCAA extra.</p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-mova-muted block">Envase 1000g</span>
+                                    <span class="text-lg font-bold text-mova-cream">$38.900</span>
+                                </div>
+                                <button onclick="addToCart('IsoPure Hydro Whey', 38900)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Producto 3 -->
+                        <div class="bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-500/30">RECUPERACIÓN</span>
+                                    <i data-lucide="activity" class="w-20 h-20 text-emerald-400/40 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">Creatina Monohidratada</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">100% pura Creapure® para fuerza y regeneración muscular rápida.</p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs text-mova-muted block">Envase 300g</span>
+                                    <span class="text-lg font-bold text-mova-cream">$29.000</span>
+                                </div>
+                                <button onclick="addToCart('Creatina Monohidratada', 29000)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- SELECCIÓN DE AVATAR (6 ESTEREOTIPOS x M/F) -->
-                <div>
-                    <div class="flex items-center justify-between mb-2">
-                        <label class="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">Selecciona tu Avatar</label>
-                        <!-- Selector de Género -->
-                        <div class="flex bg-slate-800 p-0.5 rounded-lg border border-slate-700">
-                            <button type="button" onclick="setGender('M')" id="gender-m-btn" class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-600 text-white transition">M</button>
-                            <button type="button" onclick="setGender('F')" id="gender-f-btn" class="px-2.5 py-1 rounded-md text-[10px] font-bold text-slate-400 transition">F</button>
+            <!-- PESTAÑA 2: MENÚS FIT & LOW CARB -->
+            <div id="card1" class="snap-card min-w-[90vw] sm:min-w-[80vw] lg:min-w-[1000px] flex-shrink-0 transition-all duration-300 opacity-60 scale-95">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2">
+                        <div>
+                            <span class="text-xs font-bold text-mova-emerald uppercase tracking-widest">Alimentación Diseñada</span>
+                            <h3 class="text-2xl sm:text-3xl font-brand font-bold text-mova-cream mt-0.5">Menús & Viandas Gourmet</h3>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-mova-dark/60 p-1 rounded-xl border border-white/10">
+                            <button onclick="filterMenus('all')" id="btnFilterAll" class="px-3 py-1 rounded-lg text-xs font-bold bg-mova-emerald text-mova-dark transition">Todos</button>
+                            <button onclick="filterMenus('fit')" id="btnFilterFit" class="px-3 py-1 rounded-lg text-xs font-bold text-mova-muted hover:text-mova-cream transition">Línea FIT</button>
+                            <button onclick="filterMenus('lowcarb')" id="btnFilterLowCarb" class="px-3 py-1 rounded-lg text-xs font-bold text-mova-muted hover:text-mova-cream transition">LOW CARB</button>
                         </div>
                     </div>
 
-                    <!-- Grilla de 6 Avatares -->
-                    <div class="grid grid-cols-3 gap-2" id="avatars-grid"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Vianda 1 FIT -->
+                        <div class="menu-item fit bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-blue-500/20 text-blue-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-blue-500/30">LÍNEA FIT</span>
+                                    <i data-lucide="utensils" class="w-20 h-20 text-blue-400/40 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">Pechuga con Arroz Yamaní & Vegetales</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Pollo orgánico, carbohidratos de digestión lenta y vegetales salteados.</p>
+                                <div class="mt-3 flex items-center space-x-3 text-[11px] text-mova-cream/70 font-mono">
+                                    <span>480 kcal</span> · <span>42g Prot</span> · <span>45g Carb</span>
+                                </div>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <span class="text-lg font-bold text-mova-cream">$6.200</span>
+                                <button onclick="addToCart('Pechuga FIT Yamaní', 6200)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vianda 2 LOW CARB -->
+                        <div class="menu-item lowcarb bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-purple-500/20 text-purple-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-purple-500/30">LOW CARB</span>
+                                    <i data-lucide="flame" class="w-20 h-20 text-purple-400/40 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">Salmón al Eneldo & Wok Keto</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Medallón de salmón rosado con vegetal verde al wok y aceite de oliva virgen.</p>
+                                <div class="mt-3 flex items-center space-x-3 text-[11px] text-mova-cream/70 font-mono">
+                                    <span>390 kcal</span> · <span>38g Prot</span> · <span>8g Carb</span>
+                                </div>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <span class="text-lg font-bold text-mova-cream">$8.900</span>
+                                <button onclick="addToCart('Salmón Keto Wok', 8900)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Vianda 3 PACK -->
+                        <div class="menu-item fit lowcarb bg-mova-dark/60 rounded-2xl p-5 border border-mova-emerald/30 bg-gradient-to-b from-mova-emerald/10 to-transparent transition group flex flex-col justify-between">
+                            <div>
+                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
+                                    <span class="absolute top-2 left-2 bg-mova-emerald text-mova-dark text-[10px] font-extrabold px-2 py-0.5 rounded-full">PACK SEMANAL (5U)</span>
+                                    <i data-lucide="package" class="w-20 h-20 text-mova-emerald/50 group-hover:scale-110 transition duration-500"></i>
+                                </div>
+                                <h4 class="font-bold text-lg text-mova-cream">Pack Personalizado 5 Días</h4>
+                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Elige 5 viandas combinadas a elección para toda tu semana de entrenamiento.</p>
+                            </div>
+                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] text-mova-emerald uppercase font-bold block">15% Ahorro</span>
+                                    <span class="text-lg font-bold text-mova-cream">$31.500</span>
+                                </div>
+                                <button onclick="addToCart('Pack Semanal 5 Viandas', 31500)" class="p-3 bg-mova-emerald text-mova-dark rounded-xl hover:bg-mova-cream transition font-bold flex items-center space-x-1">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div id="reg-error" class="text-red-400 text-xs font-bold text-center hidden">Las contraseñas no coinciden.</div>
+            <!-- REQUERIMIENTO 5: DATOS DE PERFIL, MÉTRICAS Y GRÁFICO INTERACTIVO -->
+            <div id="card2" class="snap-card min-w-[90vw] sm:min-w-[80vw] lg:min-w-[1000px] flex-shrink-0 transition-all duration-300 opacity-60 scale-95">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2">
+                        <div>
+                            <span class="text-xs font-bold text-mova-emerald uppercase tracking-widest">Configuración Biométrica</span>
+                            <h3 class="text-2xl sm:text-3xl font-brand font-bold text-mova-cream mt-0.5">Perfil de Salud & Cuenta</h3>
+                        </div>
+                        <button onclick="saveProfileData()" class="bg-mova-emerald hover:bg-mova-cream text-mova-dark font-bold text-xs px-4 py-2 rounded-xl transition flex items-center space-x-1.5">
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Guardar Cambios</span>
+                        </button>
+                    </div>
 
-                <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-xl shadow-lg shadow-emerald-600/30 transition uppercase text-xs tracking-wider">Crear Cuenta & Continuar</button>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Datos Personales -->
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-mova-muted border-b border-white/10 pb-2">Datos Personales & Envío</h4>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Nombre Completo</label>
+                                <input type="text" id="profName" value="Arnaldo R." class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Correo Electrónico</label>
+                                <input type="email" id="profEmail" value="arnaldo@mova.com" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Teléfono / WhatsApp</label>
+                                <input type="tel" id="profPhone" value="+54 9 11 5422-9800" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Dirección de Entrega</label>
+                                <input type="text" id="profAddress" value="Av. Libertador 4500, CABA" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                            </div>
+                        </div>
+
+                        <!-- Parámetros Físicos -->
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-mova-muted border-b border-white/10 pb-2">Parámetros Físicos</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs text-mova-cream/80 mb-1">Estatura (cm)</label>
+                                    <input type="number" id="profHeight" value="178" onchange="recalculateBiometrics()" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-mova-cream/80 mb-1">Peso Actual (kg)</label>
+                                    <input type="number" id="profWeight" value="76" onchange="recalculateBiometrics()" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Objetivo Principal</label>
+                                <select id="profGoal" onchange="recalculateBiometrics()" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                    <option value="recomp">Recomposición / Masa Muscular</option>
+                                    <option value="def">Definición & Pérdida de Grasa</option>
+                                    <option value="perf">Rendimiento Deportivo</option>
+                                    <option value="health">Salud Integral</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-mova-cream/80 mb-1">Requerimientos Nutricionales</label>
+                                <select id="profDiet" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                    <option value="none">Sin restricciones particulares</option>
+                                    <option value="sintacc">Sin TACC / Apto Celíacos</option>
+                                    <option value="lactose">Sin Lactosa</option>
+                                    <option value="lowsodium">Bajo en Sodio</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Métricas Calculadas & Gráfico Chart.js -->
+                        <div class="space-y-4 bg-mova-dark/60 p-4 rounded-2xl border border-white/5 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-mova-emerald mb-3 flex items-center justify-between">
+                                    <span>Cálculos Biométricos</span>
+                                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                                </h4>
+                                
+                                <div class="grid grid-cols-2 gap-3 mb-4">
+                                    <div class="bg-mova-deep p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-mova-muted block">Índice IMC</span>
+                                        <span id="calcIMC" class="text-xl font-bold text-mova-cream">24.0</span>
+                                        <span class="text-[9px] text-mova-emerald block font-medium">Normopeso</span>
+                                    </div>
+                                    <div class="bg-mova-deep p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-mova-muted block">Calorías TDEE</span>
+                                        <span id="calcTDEE" class="text-xl font-bold text-mova-cream">2,650</span>
+                                        <span class="text-[9px] text-mova-muted block">kcal / día</span>
+                                    </div>
+                                    <div class="bg-mova-deep p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-mova-muted block">Proteína Diaria</span>
+                                        <span id="calcProtein" class="text-xl font-bold text-mova-emerald">152g</span>
+                                        <span class="text-[9px] text-mova-muted block">2.0g / kg</span>
+                                    </div>
+                                    <div class="bg-mova-deep p-3 rounded-xl border border-white/5">
+                                        <span class="text-[10px] text-mova-muted block">Agua Objetivo</span>
+                                        <span id="calcWater" class="text-xl font-bold text-mova-cream">3.2L</span>
+                                        <span class="text-[9px] text-mova-muted block">diarios</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <span class="text-[11px] font-bold text-mova-cream/80 mb-2 block">Evolución de Peso (Últimas 6 semanas)</span>
+                                    <div class="h-28 w-full">
+                                        <canvas id="weightChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/5 py-6 px-4 text-center text-xs text-mova-muted">
+        <p>© 2026 MOVA Nutrition Science. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- REQUERIMIENTO 3: VENTANA MODAL DE LOGIN / REGISTRO PREVIA CON VALIDACIONES -->
+    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-all duration-300">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 border border-white/10 relative shadow-2xl">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 text-mova-muted hover:text-mova-cream">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <h2 class="font-brand font-extrabold text-2xl tracking-wider text-mova-cream">M O V A <span class="text-mova-emerald">.</span></h2>
+                <p class="text-xs text-mova-muted mt-1">Accede a tu plan personalizado de nutrición</p>
+            </div>
+
+            <div class="grid grid-cols-2 bg-mova-dark/80 p-1 rounded-xl mb-6 border border-white/5">
+                <button id="authTabLogin" onclick="setAuthMode('login')" class="py-2 text-xs font-bold rounded-lg bg-mova-emerald text-mova-dark transition">Iniciar Sesión</button>
+                <button id="authTabRegister" onclick="setAuthMode('register')" class="py-2 text-xs font-bold rounded-lg text-mova-muted hover:text-mova-cream transition">Registrarse</button>
+            </div>
+
+            <!-- Form Iniciar Sesión -->
+            <form id="formLogin" onsubmit="handleAuthSubmit(event, 'login')" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-mova-cream/80 mb-1">Correo Electrónico</label>
+                    <input type="email" required placeholder="tuemail@dominio.com" class="w-full bg-mova-dark/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                </div>
+                <div>
+                    <label class="block text-xs text-mova-cream/80 mb-1">Contraseña</label>
+                    <input type="password" required placeholder="••••••••" class="w-full bg-mova-dark/90 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                </div>
+                <button type="submit" class="w-full bg-mova-cream hover:bg-mova-emerald text-mova-dark font-bold py-3 rounded-xl transition text-sm shadow-lg mt-2">
+                    Ingresar al Ecosistema
+                </button>
             </form>
 
-            <!-- ACCESO DIRECTO INVITADO -->
-            <div class="mt-6 text-center border-t border-slate-800 pt-4">
-                <button type="button" onclick="loginAsGuest()" class="text-xs text-slate-400 hover:text-emerald-400 font-bold transition underline">Ingresar como Invitado (Modo Exploración) &rarr;</button>
+            <!-- Form Registro con Validación de Contraseñas -->
+            <form id="formRegister" onsubmit="handleAuthSubmit(event, 'register')" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs text-mova-cream/80 mb-1">Correo Electrónico</label>
+                    <input type="email" id="regEmail" required placeholder="tuemail@dominio.com" class="w-full bg-mova-dark/90 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                </div>
+                <div>
+                    <label class="block text-xs text-mova-cream/80 mb-1">Contraseña</label>
+                    <input type="password" id="regPass" required placeholder="••••••••" class="w-full bg-mova-dark/90 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                </div>
+                <div>
+                    <label class="block text-xs text-mova-cream/80 mb-1">Repetir Contraseña</label>
+                    <input type="password" id="regPassRepeat" required placeholder="••••••••" class="w-full bg-mova-dark/90 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                </div>
+                <p id="passMatchError" class="text-[11px] text-rose-400 hidden">Las contraseñas no coinciden.</p>
+
+                <button type="submit" class="w-full bg-mova-emerald hover:bg-mova-cream text-mova-dark font-bold py-3 rounded-xl transition text-sm shadow-lg mt-2">
+                    Crear Cuenta MOVA
+                </button>
+            </form>
+
+            <div class="mt-4 pt-4 border-t border-white/5 text-center">
+                <button onclick="closeAuthModal()" class="text-xs text-mova-muted hover:text-mova-cream underline">
+                    Continuar como invitado sin registrarse
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- PANTALLA BIENVENIDA / DASHBOARD (PRUEBA DE ACCESO) -->
-    <div id="app-dashboard" class="hidden max-w-xl w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl">
-        <div id="user-avatar-display" class="w-20 h-20 mx-auto rounded-3xl bg-emerald-600/20 border-2 border-emerald-500 flex items-center justify-center p-2 mb-4"></div>
-        <h2 class="text-2xl font-black text-white" id="welcome-user-name">¡Bienvenido!</h2>
-        <p class="text-slate-400 text-xs mt-1" id="welcome-user-email"></p>
-        <div class="mt-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3 text-emerald-400 text-xs font-bold">
-            ✓ Acceso verificado correctamente. Datos guardados con éxito.
+    <!-- PANEL CARRITO -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 pointer-events-none transition-all duration-300">
+        <div id="cartOverlay" onclick="toggleCartDrawer()" class="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+        <div id="cartPanel" class="absolute top-0 right-0 bottom-0 w-full max-w-md bg-mova-dark/95 border-l border-white/10 p-6 flex flex-col justify-between translate-x-full transition-transform duration-300 pointer-events-auto">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-mova-emerald"></i>
+                        <h3 class="font-bold text-lg text-mova-cream">Tu Carrito MOVA</h3>
+                    </div>
+                    <button onclick="toggleCartDrawer()" class="p-1 text-mova-muted hover:text-mova-cream">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div id="cartItemsList" class="space-y-3 max-h-[55vh] overflow-y-auto pr-1"></div>
+            </div>
+
+            <div class="pt-4 border-t border-white/10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-sm text-mova-muted">Subtotal</span>
+                    <span id="cartTotal" class="text-2xl font-bold text-mova-cream">$0</span>
+                </div>
+                <button onclick="alert('¡Proceso de compra iniciado con éxito! Redirigiendo a pasarela de pago...')" class="w-full bg-mova-emerald hover:bg-mova-cream text-mova-dark font-bold py-3.5 rounded-xl transition flex items-center justify-center space-x-2">
+                    <span>Confirmar Pedido</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
         </div>
-        <button onclick="logout()" class="mt-6 px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl transition">Cerrar Sesión</button>
     </div>
 
-    <!-- SCRIPT DE CONTROL -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // Definición de los 6 Estereotipos de Avatares (Versiones Masculina y Femenina en SVG)
-        const avatarProfiles = [
-            {
-                id: 'atleta',
-                title: 'Atleta / Gym',
-                icon: 'fa-dumbbell',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="20" r="12"/><path d="M16 52c0-8.8 7.2-16 16-16s16 7.2 16 16v4H16v-4z"/><path d="M12 28h8v6h-8zM44 28h8v6h-8z" fill="#059669"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="20" r="11"/><path d="M18 52c0-7.7 6.3-14 14-14s14 6.3 14 14v4H18v-4z"/><path d="M20 12c-4 0-8 6-8 12h6zM44 12c4 0 8 6 8 12h-6z" fill="#059669"/></svg>`
-            },
-            {
-                id: 'runner',
-                title: 'Runner / Cardio',
-                icon: 'fa-person-running',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="18" r="10"/><path d="M20 54c0-6.6 5.4-12 12-12s12 5.4 12 12v2H20v-2z"/><path d="M24 16l16-4v6L24 22z" fill="#059669"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="18" r="10"/><path d="M22 54c0-5.5 4.5-10 10-10s10 4.5 10 10v2H22v-2z"/><path d="M16 18c0 8 6 12 16 12s16-4 16-12z" fill="#059669" opacity="0.4"/></svg>`
-            },
-            {
-                id: 'ejecutivo',
-                title: 'Ejecutivo / Biz',
-                icon: 'fa-user-tie',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="18" r="10"/><path d="M18 52c0-7.7 6.3-14 14-14s14 6.3 14 14v4H18v-4z"/><path d="M30 38l2 10 2-10z" fill="#ffffff"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="18" r="10"/><path d="M20 52c0-6.6 5.4-12 12-12s12 5.4 12 12v4H20v-4z"/><path d="M26 38l6 6 6-6z" fill="#ffffff"/></svg>`
-            },
-            {
-                id: 'biohacker',
-                title: 'Biohacker / Tech',
-                icon: 'fa-microchip',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="20" r="11"/><path d="M18 52c0-7.7 6.3-14 14-14s14 6.3 14 14v4H18v-4z"/><rect x="22" y="16" width="20" height="6" rx="3" fill="#34d399"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="20" r="10"/><path d="M20 52c0-6.6 5.4-12 12-12s12 5.4 12 12v4H20v-4z"/><rect x="22" y="16" width="20" height="6" rx="3" fill="#34d399"/></svg>`
-            },
-            {
-                id: 'holistico',
-                title: 'Holístico / Yoga',
-                icon: 'fa-spa',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="22" r="10"/><path d="M20 52c0-6.6 5.4-12 12-12s12 5.4 12 12v4H20v-4z"/><path d="M32 6l4 8h-8z" fill="#a7f3d0"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="22" r="10"/><path d="M22 52c0-5.5 4.5-10 10-10s10 4.5 10 10v4H22v-4z"/><path d="M32 6l4 8h-8z" fill="#a7f3d0"/></svg>`
-            },
-            {
-                id: 'urbano',
-                title: 'Urbano / Style',
-                icon: 'fa-city',
-                svgM: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="22" r="10"/><path d="M18 52c0-7.7 6.3-14 14-14s14 6.3 14 14v4H18v-4z"/><path d="M20 14h24v6H20z" fill="#059669"/></svg>`,
-                svgF: `<svg viewBox="0 0 64 64" class="w-full h-full fill-emerald-400"><circle cx="32" cy="22" r="10"/><path d="M20 52c0-6.6 5.4-12 12-12s12 5.4 12 12v4H20v-4z"/><path d="M18 14h28v6H18z" fill="#059669"/></svg>`
-            }
-        ];
+        let cart = [];
+        let currentTab = 0;
+        let weightChartInstance = null;
 
-        let selectedGender = 'M';
-        let selectedAvatarIndex = 0;
+        window.onload = function() {
+            lucide.createIcons();
+            initChart();
+            recalculateBiometrics();
 
-        window.addEventListener('DOMContentLoaded', () => {
-            renderAvatars();
-            checkSession();
-        });
+            const container = document.getElementById('carouselContainer');
+            container.addEventListener('scroll', handleScrollSnap);
+        };
 
-        function switchTab(tab) {
-            if (tab === 'login') {
-                document.getElementById('btn-tab-login').className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-md";
-                document.getElementById('btn-tab-register').className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-400";
-                document.getElementById('form-login').classList.remove('hidden');
-                document.getElementById('form-register').classList.add('hidden');
-            } else {
-                document.getElementById('btn-tab-register').className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-md";
-                document.getElementById('btn-tab-login').className = "flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-400";
-                document.getElementById('form-register').classList.remove('hidden');
-                document.getElementById('form-login').classList.add('hidden');
-            }
-        }
-
-        function setGender(g) {
-            selectedGender = g;
-            document.getElementById('gender-m-btn').className = g === 'M' ? "px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-600 text-white transition" : "px-2.5 py-1 rounded-md text-[10px] font-bold text-slate-400 transition";
-            document.getElementById('gender-f-btn').className = g === 'F' ? "px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-600 text-white transition" : "px-2.5 py-1 rounded-md text-[10px] font-bold text-slate-400 transition";
-            renderAvatars();
-        }
-
-        function renderAvatars() {
-            const grid = document.getElementById('avatars-grid');
-            grid.innerHTML = avatarProfiles.map((item, idx) => `
-                <div onclick="selectAvatar(${idx})" class="avatar-card p-2 rounded-2xl bg-slate-800/60 border border-slate-700/80 text-center cursor-pointer ${selectedAvatarIndex === idx ? 'selected' : ''}">
-                    <div class="w-10 h-10 mx-auto">
-                        ${selectedGender === 'M' ? item.svgM : item.svgF}
-                    </div>
-                    <span class="block text-[9px] font-bold text-slate-300 mt-1 truncate">${item.title}</span>
-                </div>
-            `).join('');
-        }
-
-        function selectAvatar(idx) {
-            selectedAvatarIndex = idx;
-            renderAvatars();
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
+        function switchTab(index) {
+            currentTab = index;
+            const container = document.getElementById('carouselContainer');
+            const card = document.getElementById(`card${index}`);
             
-            const storedUser = JSON.parse(localStorage.getItem('mova_registered_user'));
-
-            if (storedUser && storedUser.email === email && storedUser.password === pass) {
-                grantAccess(storedUser);
-            } else if (email && pass) {
-                // Si no hay registrado o es cuenta de prueba
-                grantAccess({ email: email, avatarSvg: avatarProfiles[0].svgM });
-            } else {
-                document.getElementById('login-error').classList.remove('hidden');
+            if (card) {
+                const scrollLeft = card.offsetLeft - (container.offsetWidth - card.offsetWidth) / 2;
+                container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
             }
+
+            updateTabUI(index);
         }
 
-        function handleRegister(e) {
-            e.preventDefault();
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-password').value;
-            const confirm = document.getElementById('reg-confirm').value;
+        function handleScrollSnap() {
+            const container = document.getElementById('carouselContainer');
+            const containerCenter = container.scrollLeft + container.offsetWidth / 2;
 
-            if (pass !== confirm) {
-                document.getElementById('reg-error').classList.remove('hidden');
-                return;
-            }
-            document.getElementById('reg-error').classList.add('hidden');
+            [0, 1, 2].forEach(index => {
+                const card = document.getElementById(`card${index}`);
+                if (!card) return;
+                const cardCenter = card.offsetLeft + card.offsetWidth / 2;
 
-            const chosenAvatar = avatarProfiles[selectedAvatarIndex];
-            const newUser = {
-                email: email,
-                password: pass,
-                gender: selectedGender,
-                avatarSvg: selectedGender === 'M' ? chosenAvatar.svgM : chosenAvatar.svgF,
-                avatarTitle: chosenAvatar.title
-            };
-
-            // Guardado en almacenamiento local de alto rendimiento
-            localStorage.setItem('mova_registered_user', JSON.stringify(newUser));
-            grantAccess(newUser);
-        }
-
-        function loginAsGuest() {
-            grantAccess({
-                email: 'invitado@mova.fit',
-                avatarSvg: avatarProfiles[0].svgM,
-                avatarTitle: 'Invitado Explorador'
+                if (Math.abs(containerCenter - cardCenter) < card.offsetWidth / 2) {
+                    currentTab = index;
+                    updateTabUI(index);
+                }
             });
         }
 
-        function grantAccess(user) {
-            localStorage.setItem('mova_active_session', JSON.stringify(user));
-            document.getElementById('auth-modal').classList.add('hidden');
-            
-            // Mostrar Pantalla de Verificación Correcta
-            document.getElementById('welcome-user-name').innerText = `¡Bienvenido, ${user.email.split('@')[0]}!`;
-            document.getElementById('welcome-user-email').innerText = user.email;
-            document.getElementById('user-avatar-display').innerHTML = user.avatarSvg;
-            document.getElementById('app-dashboard').classList.remove('hidden');
+        function updateTabUI(activeIndex) {
+            [0, 1, 2].forEach(i => {
+                const btn = document.getElementById(`navTab${i}`);
+                const card = document.getElementById(`card${i}`);
+                
+                if (i === activeIndex) {
+                    btn.className = "px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 bg-mova-emerald text-mova-dark shadow-md";
+                    card.classList.remove('opacity-60', 'scale-95');
+                    card.classList.add('opacity-100', 'scale-100');
+                } else {
+                    btn.className = "px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 text-mova-cream/70 hover:text-mova-cream";
+                    card.classList.remove('opacity-100', 'scale-100');
+                    card.classList.add('opacity-60', 'scale-95');
+                }
+            });
         }
 
-        function checkSession() {
-            const active = localStorage.getItem('mova_active_session');
-            if (active) {
-                grantAccess(JSON.parse(active));
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function setAuthMode(mode) {
+            const btnLogin = document.getElementById('authTabLogin');
+            const btnReg = document.getElementById('authTabRegister');
+            const formLogin = document.getElementById('formLogin');
+            const formRegister = document.getElementById('formRegister');
+
+            if (mode === 'login') {
+                btnLogin.className = "py-2 text-xs font-bold rounded-lg bg-mova-emerald text-mova-dark transition";
+                btnReg.className = "py-2 text-xs font-bold rounded-lg text-mova-muted hover:text-mova-cream transition";
+                formLogin.classList.remove('hidden');
+                formRegister.classList.add('hidden');
+            } else {
+                btnReg.className = "py-2 text-xs font-bold rounded-lg bg-mova-emerald text-mova-dark transition";
+                btnLogin.className = "py-2 text-xs font-bold rounded-lg text-mova-muted hover:text-mova-cream transition";
+                formRegister.classList.remove('hidden');
+                formLogin.classList.add('hidden');
             }
         }
 
-        function logout() {
-            localStorage.removeItem('mova_active_session');
-            document.getElementById('app-dashboard').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('hidden');
+        function handleAuthSubmit(e, mode) {
+            e.preventDefault();
+            if (mode === 'register') {
+                const p1 = document.getElementById('regPass').value;
+                const p2 = document.getElementById('regPassRepeat').value;
+                const err = document.getElementById('passMatchError');
+
+                if (p1 !== p2) {
+                    err.classList.remove('hidden');
+                    return;
+                }
+                err.classList.add('hidden');
+                
+                const email = document.getElementById('regEmail').value;
+                document.getElementById('headerUserName').innerText = email.split('@')[0];
+                document.getElementById('profEmail').value = email;
+            }
+
+            closeAuthModal();
+        }
+
+        function recalculateBiometrics() {
+            const h = parseFloat(document.getElementById('profHeight').value) || 178;
+            const w = parseFloat(document.getElementById('profWeight').value) || 76;
+            const goal = document.getElementById('profGoal').value;
+
+            const imc = (w / ((h / 100) * (h / 100))).toFixed(1);
+            document.getElementById('calcIMC').innerText = imc;
+
+            let baseTDEE = Math.round(10 * w + 6.25 * h - 5 * 28 + 5) * 1.45;
+            if (goal === 'def') baseTDEE -= 400;
+            if (goal === 'recomp') baseTDEE += 250;
+
+            document.getElementById('calcTDEE').innerText = baseTDEE.toLocaleString();
+            document.getElementById('calcProtein').innerText = Math.round(w * 2.0) + 'g';
+            document.getElementById('calcWater').innerText = (w * 0.042).toFixed(1) + 'L';
+        }
+
+        function saveProfileData() {
+            const name = document.getElementById('profName').value;
+            document.getElementById('headerUserName').innerText = name;
+            alert('¡Perfil de salud actualizado con éxito!');
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            weightChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Hoy'],
+                    datasets: [{
+                        label: 'Peso (kg)',
+                        data: [78.5, 78.0, 77.4, 76.8, 76.2, 76.0],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#9ca3af', font: { size: 9 } } }
+                    }
+                }
+            });
+        }
+
+        function filterMenus(type) {
+            const items = document.querySelectorAll('.menu-item');
+            items.forEach(item => {
+                if (type === 'all' || item.classList.contains(type)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            ['All', 'Fit', 'LowCarb'].forEach(t => {
+                const btn = document.getElementById(`btnFilter${t}`);
+                if (t.toLowerCase() === type || (t === 'All' && type === 'all')) {
+                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-mova-emerald text-mova-dark transition";
+                } else {
+                    btn.className = "px-3 py-1 rounded-lg text-xs font-bold text-mova-muted hover:text-mova-cream transition";
+                }
+            });
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            const panel = document.getElementById('cartPanel');
+
+            if (panel.classList.contains('translate-x-full')) {
+                drawer.classList.remove('pointer-events-none');
+                overlay.classList.remove('opacity-0');
+                panel.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('opacity-0');
+                panel.classList.add('translate-x-full');
+                setTimeout(() => drawer.classList.add('pointer-events-none'), 300);
+            }
+        }
+
+        function addToCart(title, price) {
+            const existing = cart.find(i => i.title === title);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ title, price, qty: 1 });
+            }
+            renderCart();
+            toggleCartDrawer();
+        }
+
+        function updateCartQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cartItemsList');
+            const badge = document.getElementById('cartBadge');
+            const totalEl = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                list.innerHTML = `<div class="text-center py-12 text-mova-muted text-xs">Tu carrito está vacío.</div>`;
+                badge.innerText = '0';
+                totalEl.innerText = '$0';
+                return;
+            }
+
+            let total = 0;
+            let count = 0;
+            list.innerHTML = '';
+
+            cart.forEach((item, idx) => {
+                total += item.price * item.qty;
+                count += item.qty;
+
+                list.innerHTML += `
+                    <div class="bg-mova-dark/80 p-3 rounded-xl border border-white/5 flex items-center justify-between">
+                        <div>
+                            <h5 class="text-xs font-bold text-mova-cream">${item.title}</h5>
+                            <span class="text-xs text-mova-emerald font-semibold">$${(item.price * item.qty).toLocaleString()}</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-mova-deep px-2 py-1 rounded-lg border border-white/10">
+                            <button onclick="updateCartQty(${idx}, -1)" class="text-xs text-mova-muted hover:text-mova-cream px-1">-</button>
+                            <span class="text-xs font-bold text-mova-cream">${item.qty}</span>
+                            <button onclick="updateCartQty(${idx}, 1)" class="text-xs text-mova-muted hover:text-mova-cream px-1">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            badge.innerText = count;
+            totalEl.innerText = `$${total.toLocaleString()}`;
         }
     </script>
 </body>
