@@ -319,49 +319,11 @@
             #card0 .catalog-tools { align-items:stretch; }
         }
     </style>
-</head>
+<style>.consumer-line .consumer-tabs{display:flex;gap:.5rem;margin:.8rem 0}.consumer-line input[type=radio]{position:absolute;opacity:0;pointer-events:none}.consumer-tabs label{cursor:pointer;border:1px solid #ffffff20;background:#101612;color:#eee;border-radius:99px;padding:.55rem .85rem;font-size:.68rem;font-weight:800}.consumer-line input:nth-of-type(1):checked~.consumer-tabs label:nth-child(1),.consumer-line input:nth-of-type(2):checked~.consumer-tabs label:nth-child(2),.consumer-line input:nth-of-type(3):checked~.consumer-tabs label:nth-child(3){background:#10b981;color:#08100b}.consumer-view{display:none}.consumer-line input:nth-of-type(1):checked~.consumer-views .consumer-view:nth-child(1),.consumer-line input:nth-of-type(2):checked~.consumer-views .consumer-view:nth-child(2),.consumer-line input:nth-of-type(3):checked~.consumer-views .consumer-view:nth-child(3){display:grid}.consumer-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;max-height:680px;overflow:auto;padding:.2rem}.consumer-pack{border:1px solid #10b98144;border-radius:1.2rem;padding:1.5rem;background:radial-gradient(ellipse at 90% 0%,#10b98122,transparent 55%),#101612;min-height:180px;align-content:center;gap:.6rem}@media(max-width:640px){.consumer-grid{grid-template-columns:1fr}}</style><style id="mova-fresh-readable-lines">#movaLines .consumer-line{position:relative;isolation:isolate;overflow:hidden;background:rgba(244,247,237,.97)!important;border:1px solid rgba(40,75,47,.18)!important;box-shadow:0 20px 55px rgba(0,0,0,.22);color:#1c2a20!important}#movaLines .consumer-line:before{content:"";position:absolute;z-index:-1;inset:-8px;background:linear-gradient(120deg,rgba(244,248,238,.94),rgba(225,239,220,.88)),url("https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1400&auto=format&fit=crop") center/cover;filter:blur(2px);transform:scale(1.02)}#movaLines .consumer-line>*{position:relative;z-index:1}#movaLines .consumer-line h4,#movaLines .consumer-line h5{color:#203126!important}#movaLines .consumer-line p{color:#526356!important}#movaLines .consumer-line .consumer-tabs label{color:#314537;background:rgba(255,255,250,.92);border-color:rgba(43,80,49,.2)}#movaLines .consumer-line input:nth-of-type(1):checked~.consumer-tabs label:nth-child(1),#movaLines .consumer-line input:nth-of-type(2):checked~.consumer-tabs label:nth-child(2),#movaLines .consumer-line input:nth-of-type(3):checked~.consumer-tabs label:nth-child(3){background:#23945f;color:#fff;border-color:#23945f}#movaLines .consumer-card{background:rgba(255,255,249,.96);border-color:rgba(42,75,47,.14);box-shadow:0 8px 24px rgba(23,44,27,.08)}#movaLines .consumer-card h4{color:#203126!important}#movaLines .consumer-card p{color:#5d6a60!important}#movaLines .consumer-card .text-mova-cream,#movaLines .consumer-card strong{color:#203126!important}#movaLines .consumer-card .text-mova-cream\/80{color:#44564a!important}#movaLines .consumer-pack{background:linear-gradient(140deg,rgba(255,255,249,.98),rgba(225,239,220,.97));border-color:rgba(35,148,95,.28)}#movaLines .consumer-pack h5{color:#203126!important}#movaLines .consumer-pack p{color:#526356!important}@media(max-width:640px){#movaLines .consumer-line{padding:1rem!important}} </style></head>
 <body class="bg-mova-dark text-mova-cream font-sans min-h-full flex flex-col antialiased selection:bg-mova-emerald selection:text-mova-dark">
 
     <!-- REQUERIMIENTO 4: BARRA SUPERIOR CONTROLADA CON USUARIO Y CONTROLES -->
-    <header class="fixed top-0 left-0 right-0 z-40 bg-mova-dark/80 backdrop-blur-md border-b border-white/5 px-4 lg:px-8 py-3.5 flex items-center justify-between transition-all duration-300">
-        <!-- Izquierda: Perfil / Avatar -->
-        <div class="flex items-center space-x-3">
-            <button onclick="switchTab(2)" class="flex items-center space-x-2.5 bg-white/5 hover:bg-white/10 p-1.5 pr-3 rounded-full border border-white/10 transition group text-left">
-                <div class="w-8 h-8 rounded-full bg-mova-emerald/30 border border-mova-emerald flex items-center justify-center text-mova-emerald font-bold text-xs" id="userAvatar">
-                    AR
-                </div>
-                <div class="hidden sm:block text-xs">
-                    <p class="font-semibold text-mova-cream leading-none group-hover:text-mova-emerald transition" id="headerUserName">Arnaldo R.</p>
-                    <p class="text-[10px] text-mova-muted leading-tight mt-0.5" id="headerUserGoal">Mantenimiento FIT</p>
-                </div>
-            </button>
-        </div>
-
-        <!-- Centro: Marca M O V A . -->
-        <div class="text-center cursor-pointer" onclick="switchTab(0)">
-            <h1 class="font-brand font-extrabold text-2xl lg:text-3xl tracking-widest text-mova-cream uppercase inline-block">
-                M O V A <span class="text-mova-emerald text-xl sm:text-2xl">.</span>
-            </h1>
-        </div>
-
-        <!-- Derecha: Carrito, Ajustes y Cierre de Sesión -->
-        <div class="flex items-center space-x-2 sm:space-x-3">
-            <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-mova-cream hover:text-mova-emerald transition">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                <span id="cartBadge" class="absolute -top-1 -right-1 bg-mova-emerald text-mova-dark text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
-                    0
-                </span>
-            </button>
-
-            <button onclick="switchTab(2)" class="p-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-mova-cream hover:text-mova-emerald transition hidden sm:flex">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-            </button>
-
-            <button onclick="openAuthModal()" title="Cerrar / Cambiar Sesión" class="p-2.5 rounded-full bg-white/5 hover:bg-rose-500/20 hover:text-rose-400 border border-white/10 text-mova-cream transition">
-                <i data-lucide="log-out" class="w-5 h-5"></i>
-            </button>
-        </div>
-    </header>
+    <header class="fixed top-0 left-0 right-0 z-40 bg-mova-dark/80 backdrop-blur-md border-b border-white/5 px-4 lg:px-8 py-3.5 flex items-center justify-between"><button onclick="switchTab(0)" class="font-brand font-extrabold text-2xl tracking-widest text-mova-cream">M O V A <b class="text-mova-emerald">.</b></button><nav class="flex items-center gap-2"><button onclick="openAuthModal();setAuthMode(&quot;login&quot;)" class="px-4 py-2 rounded-full border border-white/20 text-xs font-bold text-mova-cream">Iniciar sesión</button><button onclick="openAuthModal();setAuthMode(&quot;register&quot;)" class="px-4 py-2 rounded-full bg-mova-emerald text-mova-dark text-xs font-bold">Registrarse</button><button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-full bg-white/5 border border-white/10 text-mova-cream"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 bg-mova-emerald text-mova-dark text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center">0</span></button></nav></header>
 
     <!-- HERO DE MÁXIMA FIDELIDAD VISUAL A LA CAPTURA DE REFERENCIA -->
     <section class="relative min-h-[92vh] flex flex-col justify-between pt-28 pb-12 px-6 sm:px-12 bg-mova-hero border-b border-white/10">
@@ -556,87 +518,7 @@
                 </div>
             </div>
             <div id="card1" class="snap-card min-w-[90vw] sm:min-w-[80vw] lg:min-w-[1000px] flex-shrink-0 transition-all duration-300 opacity-60 scale-95">
-                <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2">
-                        <div>
-                            <span class="text-xs font-bold text-mova-emerald uppercase tracking-widest">Alimentación Diseñada</span>
-                            <h3 class="text-2xl sm:text-3xl font-brand font-bold text-mova-cream mt-0.5">Menús & Viandas Gourmet</h3>
-                        </div>
-                        <div class="flex items-center space-x-2 bg-mova-dark/60 p-1 rounded-xl border border-white/10">
-                            <button onclick="filterMenus('all')" id="btnFilterAll" class="px-3 py-1 rounded-lg text-xs font-bold bg-mova-emerald text-mova-dark transition">Todos</button>
-                            <button onclick="filterMenus('fit')" id="btnFilterFit" class="px-3 py-1 rounded-lg text-xs font-bold text-mova-muted hover:text-mova-cream transition">Línea FIT</button>
-                            <button onclick="filterMenus('lowcarb')" id="btnFilterLowCarb" class="px-3 py-1 rounded-lg text-xs font-bold text-mova-muted hover:text-mova-cream transition">LOW CARB</button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Vianda 1 FIT -->
-                        <div class="menu-item fit bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
-                            <div>
-                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
-                                    <span class="absolute top-2 left-2 bg-blue-500/20 text-blue-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-blue-500/30">LÍNEA FIT</span>
-                                    <i data-lucide="utensils" class="w-20 h-20 text-blue-400/40 group-hover:scale-110 transition duration-500"></i>
-                                </div>
-                                <h4 class="font-bold text-lg text-mova-cream">Pechuga con Arroz Yamaní & Vegetales</h4>
-                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Pollo orgánico, carbohidratos de digestión lenta y vegetales salteados.</p>
-                                <div class="mt-3 flex items-center space-x-3 text-[11px] text-mova-cream/70 font-mono">
-                                    <span>480 kcal</span> · <span>42g Prot</span> · <span>45g Carb</span>
-                                </div>
-                            </div>
-                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-                                <span class="text-lg font-bold text-mova-cream">$6.200</span>
-                                <button onclick="addToCart('Pechuga FIT Yamaní', 6200)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
-                                    <i data-lucide="plus" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Vianda 2 LOW CARB -->
-                        <div class="menu-item lowcarb bg-mova-dark/60 rounded-2xl p-5 border border-white/5 hover:border-mova-emerald/40 transition group flex flex-col justify-between">
-                            <div>
-                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
-                                    <span class="absolute top-2 left-2 bg-purple-500/20 text-purple-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-purple-500/30">LOW CARB</span>
-                                    <i data-lucide="flame" class="w-20 h-20 text-purple-400/40 group-hover:scale-110 transition duration-500"></i>
-                                </div>
-                                <h4 class="font-bold text-lg text-mova-cream">Salmón al Eneldo & Wok Keto</h4>
-                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Medallón de salmón rosado con vegetal verde al wok y aceite de oliva virgen.</p>
-                                <div class="mt-3 flex items-center space-x-3 text-[11px] text-mova-cream/70 font-mono">
-                                    <span>390 kcal</span> · <span>38g Prot</span> · <span>8g Carb</span>
-                                </div>
-                            </div>
-                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-                                <span class="text-lg font-bold text-mova-cream">$8.900</span>
-                                <button onclick="addToCart('Salmón Keto Wok', 8900)" class="p-3 bg-mova-cream hover:bg-mova-emerald text-mova-dark rounded-xl transition font-bold flex items-center space-x-1">
-                                    <i data-lucide="plus" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Vianda 3 PACK -->
-                        <div class="menu-item fit lowcarb bg-mova-dark/60 rounded-2xl p-5 border border-mova-emerald/30 bg-gradient-to-b from-mova-emerald/10 to-transparent transition group flex flex-col justify-between">
-                            <div>
-                                <div class="w-full h-44 rounded-xl bg-mova-deep flex items-center justify-center relative overflow-hidden mb-4">
-                                    <span class="absolute top-2 left-2 bg-mova-emerald text-mova-dark text-[10px] font-extrabold px-2 py-0.5 rounded-full">PACK SEMANAL (5U)</span>
-                                    <i data-lucide="package" class="w-20 h-20 text-mova-emerald/50 group-hover:scale-110 transition duration-500"></i>
-                                </div>
-                                <h4 class="font-bold text-lg text-mova-cream">Pack Personalizado 5 Días</h4>
-                                <p class="text-xs text-mova-muted mt-1 leading-relaxed">Elige 5 viandas combinadas a elección para toda tu semana de entrenamiento.</p>
-                            </div>
-                            <div class="mt-5 pt-4 border-t border-white/5 flex items-center justify-between">
-                                <div>
-                                    <span class="text-[10px] text-mova-emerald uppercase font-bold block">15% Ahorro</span>
-                                    <span class="text-lg font-bold text-mova-cream">$31.500</span>
-                                </div>
-                                <button onclick="addToCart('Pack Semanal 5 Viandas', 31500)" class="p-3 bg-mova-emerald text-mova-dark rounded-xl hover:bg-mova-cream transition font-bold flex items-center space-x-1">
-                                    <i data-lucide="plus" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- REQUERIMIENTO 5: DATOS DE PERFIL, MÉTRICAS Y GRÁFICO INTERACTIVO -->
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10"><div class="mb-6 pb-4 border-b border-white/10"><span class="text-xs font-bold text-mova-emerald uppercase tracking-widest">Alimentación diseñada</span><h3 class="text-2xl sm:text-3xl font-brand font-bold text-mova-cream mt-1">Menús & Viandas MOVA</h3><p class="text-xs text-mova-muted mt-2">Platos listos para disfrutar. Porciones e información nutricional aproximadas.</p></div><section class="consumer-line rounded-2xl border border-white/10 p-5 bg-mova-dark/50 mb-5"><span class="text-xs font-bold uppercase tracking-widest text-mova-emerald">Línea MOVA</span><h4 class="text-2xl font-brand font-bold text-mova-cream mt-1">FIT</h4><p class="text-xs text-mova-muted mb-4">Catálogo de platos listos. La asignación de cada plato a esta línea queda pendiente de confirmación.</p><input type="radio" name="view-0" id="menu-0" checked><input type="radio" name="view-0" id="pack5-0"><input type="radio" name="view-0" id="pack10-0"><div class="consumer-tabs"><label for="menu-0">Menús</label><label for="pack5-0">Pack de 5</label><label for="pack10-0">Pack de 10</label></div><div class="consumer-views"><div class="consumer-view consumer-grid"><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 01</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta con ensalada tibia de brócoli</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 430 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 460 kcal</span><span>Proteínas 36 g</span><span>Carbohidratos 28 g</span><span>Grasas 22 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta con ensalada tibia de brócoli',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 02</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo gratinado con brócoli y arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 480 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 485 kcal</span><span>Proteínas 42 g</span><span>Carbohidratos 48 g</span><span>Grasas 15 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo gratinado con brócoli y arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 03</span><h4 class="font-bold text-sm text-mova-cream mt-1">Fideos con bolognesa</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 520 kcal</span><span>Proteínas 27 g</span><span>Carbohidratos 65 g</span><span>Grasas 18 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Fideos con bolognesa',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 04</span><h4 class="font-bold text-sm text-mova-cream mt-1">Bondiola glaseada con puré mixto</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 480 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 510 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 42 g</span><span>Grasas 24 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Bondiola glaseada con puré mixto',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 05</span><h4 class="font-bold text-sm text-mova-cream mt-1">Bondiola al horno con zapallo al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 430 kcal</span><span>Proteínas 32 g</span><span>Carbohidratos 34 g</span><span>Grasas 19 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Bondiola al horno con zapallo al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 06</span><h4 class="font-bold text-sm text-mova-cream mt-1">Hamburguesa de carne con papas al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 460 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 550 kcal</span><span>Proteínas 35 g</span><span>Carbohidratos 46 g</span><span>Grasas 26 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Hamburguesa de carne con papas al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 07</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de cerdo</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 400 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 440 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 22 g</span><span>Grasas 24 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de cerdo',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 08</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo a la criolla con arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 470 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 52 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo a la criolla con arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 09</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pastel de carne</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 480 kcal</span><span>Proteínas 32 g</span><span>Carbohidratos 38 g</span><span>Grasas 23 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pastel de carne',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 10</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta glaseada con boniato</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 470 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 39 g</span><span>Grasas 20 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta glaseada con boniato',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 11</span><h4 class="font-bold text-sm text-mova-cream mt-1">Risotto integral de hongos</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 460 kcal</span><span>Proteínas 16 g</span><span>Carbohidratos 60 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Risotto integral de hongos',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 12</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de pollo</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 390 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 390 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 20 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de pollo',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 13</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de vegetales y arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 430 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 430 kcal</span><span>Proteínas 10 g</span><span>Carbohidratos 68 g</span><span>Grasas 10 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de vegetales y arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 14</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de vegetales y fideos</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 440 kcal</span><span>Proteínas 12 g</span><span>Carbohidratos 70 g</span><span>Grasas 11 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de vegetales y fideos',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 15</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo con hongos y batatas al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 450 kcal</span><span>Proteínas 38 g</span><span>Carbohidratos 42 g</span><span>Grasas 13 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo con hongos y batatas al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 16</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo napolitano con puré de batata</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 460 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 42 g</span><span>Carbohidratos 48 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo napolitano con puré de batata',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 17</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo salteado con tomates y balsámico</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 380 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 390 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 18 g</span><span>Grasas 15 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo salteado con tomates y balsámico',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 18</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta napolitana con puré de batata</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 440 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 480 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 40 g</span><span>Grasas 21 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta napolitana con puré de batata',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 19</span><h4 class="font-bold text-sm text-mova-cream mt-1">Polenta frita con tuco de carne</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 500 kcal</span><span>Proteínas 22 g</span><span>Carbohidratos 70 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Polenta frita con tuco de carne',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 20</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo a la criolla con arroz (Especial)</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 470 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 52 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo a la criolla con arroz (Especial)',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article></div><div class="consumer-view consumer-pack"><h5 class="text-xl font-brand font-bold">Elegí 5 menús FIT</h5><p class="text-sm text-mova-muted">Precio por menú $7.500 · Total $37.500</p><button onclick="addToCart('Pack 5 FIT',37500)" class="px-4 py-3 rounded-xl bg-mova-emerald text-mova-dark font-bold text-sm">Agregar pack</button></div><div class="consumer-view consumer-pack"><h5 class="text-xl font-brand font-bold">Elegí 10 menús FIT</h5><p class="text-sm text-mova-muted">Precio por menú $7.500 · Total $75.000</p><button onclick="addToCart('Pack 10 FIT',75000)" class="px-4 py-3 rounded-xl bg-mova-emerald text-mova-dark font-bold text-sm">Agregar pack</button></div></div></section><section class="consumer-line rounded-2xl border border-white/10 p-5 bg-mova-dark/50 mb-5"><span class="text-xs font-bold uppercase tracking-widest text-mova-emerald">Línea MOVA</span><h4 class="text-2xl font-brand font-bold text-mova-cream mt-1">LOW CARB</h4><p class="text-xs text-mova-muted mb-4">Catálogo de platos listos. La asignación de cada plato a esta línea queda pendiente de confirmación.</p><input type="radio" name="view-1" id="menu-1" checked><input type="radio" name="view-1" id="pack5-1"><input type="radio" name="view-1" id="pack10-1"><div class="consumer-tabs"><label for="menu-1">Menús</label><label for="pack5-1">Pack de 5</label><label for="pack10-1">Pack de 10</label></div><div class="consumer-views"><div class="consumer-view consumer-grid"><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 01</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta con ensalada tibia de brócoli</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 430 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 460 kcal</span><span>Proteínas 36 g</span><span>Carbohidratos 28 g</span><span>Grasas 22 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta con ensalada tibia de brócoli',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 02</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo gratinado con brócoli y arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 480 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 485 kcal</span><span>Proteínas 42 g</span><span>Carbohidratos 48 g</span><span>Grasas 15 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo gratinado con brócoli y arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 03</span><h4 class="font-bold text-sm text-mova-cream mt-1">Fideos con bolognesa</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 520 kcal</span><span>Proteínas 27 g</span><span>Carbohidratos 65 g</span><span>Grasas 18 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Fideos con bolognesa',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 04</span><h4 class="font-bold text-sm text-mova-cream mt-1">Bondiola glaseada con puré mixto</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 480 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 510 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 42 g</span><span>Grasas 24 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Bondiola glaseada con puré mixto',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 05</span><h4 class="font-bold text-sm text-mova-cream mt-1">Bondiola al horno con zapallo al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 430 kcal</span><span>Proteínas 32 g</span><span>Carbohidratos 34 g</span><span>Grasas 19 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Bondiola al horno con zapallo al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 06</span><h4 class="font-bold text-sm text-mova-cream mt-1">Hamburguesa de carne con papas al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 460 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 550 kcal</span><span>Proteínas 35 g</span><span>Carbohidratos 46 g</span><span>Grasas 26 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Hamburguesa de carne con papas al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 07</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de cerdo</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 400 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 440 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 22 g</span><span>Grasas 24 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de cerdo',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 08</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo a la criolla con arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 470 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 52 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo a la criolla con arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 09</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pastel de carne</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 480 kcal</span><span>Proteínas 32 g</span><span>Carbohidratos 38 g</span><span>Grasas 23 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pastel de carne',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 10</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta glaseada con boniato</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 470 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 39 g</span><span>Grasas 20 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta glaseada con boniato',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 11</span><h4 class="font-bold text-sm text-mova-cream mt-1">Risotto integral de hongos</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 460 kcal</span><span>Proteínas 16 g</span><span>Carbohidratos 60 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Risotto integral de hongos',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 12</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de pollo</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 390 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 390 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 20 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de pollo',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 13</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de vegetales y arroz</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 430 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 430 kcal</span><span>Proteínas 10 g</span><span>Carbohidratos 68 g</span><span>Grasas 10 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de vegetales y arroz',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 14</span><h4 class="font-bold text-sm text-mova-cream mt-1">Salteado de vegetales y fideos</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 440 kcal</span><span>Proteínas 12 g</span><span>Carbohidratos 70 g</span><span>Grasas 11 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Salteado de vegetales y fideos',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 15</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo con hongos y batatas al horno</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 450 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 450 kcal</span><span>Proteínas 38 g</span><span>Carbohidratos 42 g</span><span>Grasas 13 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo con hongos y batatas al horno',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 16</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo napolitano con puré de batata</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 460 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 42 g</span><span>Carbohidratos 48 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo napolitano con puré de batata',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 17</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo salteado con tomates y balsámico</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 380 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 390 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 18 g</span><span>Grasas 15 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo salteado con tomates y balsámico',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 18</span><h4 class="font-bold text-sm text-mova-cream mt-1">Chuleta napolitana con puré de batata</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 440 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 480 kcal</span><span>Proteínas 34 g</span><span>Carbohidratos 40 g</span><span>Grasas 21 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Chuleta napolitana con puré de batata',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 19</span><h4 class="font-bold text-sm text-mova-cream mt-1">Polenta frita con tuco de carne</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 420 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 500 kcal</span><span>Proteínas 22 g</span><span>Carbohidratos 70 g</span><span>Grasas 16 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Polenta frita con tuco de carne',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article><article class="menu-item bg-mova-dark/60 rounded-2xl p-4 border border-white/10 flex flex-col justify-between"><div><div class="w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3"><i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i></div><span class="text-[9px] font-bold text-mova-emerald uppercase tracking-widest">Menú 20</span><h4 class="font-bold text-sm text-mova-cream mt-1">Pollo a la criolla con arroz (Especial)</h4><p class="text-[11px] text-mova-muted mt-2">Porción aproximada: 470 g</p><div class="mt-2 grid grid-cols-2 gap-1 text-[10px] text-mova-cream/80"><span>≈ 490 kcal</span><span>Proteínas 39 g</span><span>Carbohidratos 52 g</span><span>Grasas 14 g</span></div></div><div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between"><strong class="text-mova-cream">$8.500</strong><button onclick="addToCart('Pollo a la criolla con arroz (Especial)',8500)" class="px-3 py-2 rounded-lg bg-mova-emerald text-mova-dark text-xs font-bold">Agregar</button></div></article></div><div class="consumer-view consumer-pack"><h5 class="text-xl font-brand font-bold">Elegí 5 menús LOW CARB</h5><p class="text-sm text-mova-muted">Precio por menú $7.500 · Total $37.500</p><button onclick="addToCart('Pack 5 LOW CARB',37500)" class="px-4 py-3 rounded-xl bg-mova-emerald text-mova-dark font-bold text-sm">Agregar pack</button></div><div class="consumer-view consumer-pack"><h5 class="text-xl font-brand font-bold">Elegí 10 menús LOW CARB</h5><p class="text-sm text-mova-muted">Precio por menú $7.500 · Total $75.000</p><button onclick="addToCart('Pack 10 LOW CARB',75000)" class="px-4 py-3 rounded-xl bg-mova-emerald text-mova-dark font-bold text-sm">Agregar pack</button></div></div></section><p class="text-[10px] text-mova-muted mt-4">Gramajes y aportes nutricionales orientativos. No se muestran recetas ni costos de elaboración.</p></div>            <!-- REQUERIMIENTO 5: DATOS DE PERFIL, MÉTRICAS Y GRÁFICO INTERACTIVO -->
             <div id="card2" class="snap-card min-w-[90vw] sm:min-w-[80vw] lg:min-w-[1000px] flex-shrink-0 transition-all duration-300 opacity-60 scale-95">
                 <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden border border-white/10">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2">
@@ -789,7 +671,7 @@
     </footer>
 
     <!-- REQUERIMIENTO 3: VENTANA MODAL DE LOGIN / REGISTRO PREVIA CON VALIDACIONES -->
-    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl transition-all duration-300">
+    <div id="authModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl transition-all duration-300">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 border border-white/10 relative shadow-2xl">
             <button id="authCloseButton" onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 text-mova-muted hover:text-mova-cream" aria-label="Cerrar acceso">
                 <i data-lucide="x" class="w-5 h-5"></i>
@@ -842,9 +724,7 @@
             </form>
 
             <div class="mt-4 pt-4 border-t border-white/5 text-center">
-                <button onclick="continueAsGuest()" class="text-xs text-mova-muted hover:text-mova-cream underline">
-                    Continuar como invitado sin registrarse
-                </button>
+                
             </div>
         </div>
     </div>
@@ -884,7 +764,7 @@
         let cart = [];
         let currentTab = 0;
         let weightChartInstance = null;
-        let hasEnteredDashboard = false;
+        let hasEnteredDashboard = true;
 
         window.onload = function() {
             lucide.createIcons();
@@ -1160,61 +1040,7 @@
             totalEl.innerText = `$${total.toLocaleString()}`;
         }
     </script>
-    <script id="mova-menu-preview-logic">
-(() => {
-    const menuCard = document.getElementById('card1');
-    const panel = menuCard && menuCard.querySelector(':scope > .glass-panel');
-    if (!panel) return;
-    const oldGrid = panel.querySelector('.grid');
-    const sourceItems = oldGrid ? [...oldGrid.querySelectorAll('.menu-item')] : [];
-    const fitMeal = sourceItems.find(item => item.classList.contains('fit') && !item.classList.contains('lowcarb'));
-    const lowCarbMeal = sourceItems.find(item => item.classList.contains('lowcarb') && !item.classList.contains('fit'));
-    const weeklyPack = sourceItems.find(item => item.classList.contains('fit') && item.classList.contains('lowcarb'));
-    if (!fitMeal || !lowCarbMeal || !weeklyPack) return;
 
-    const header = panel.querySelector('.mb-6.pb-4');
-    if (header && header.lastElementChild) {
-        const hint = document.createElement('div');
-        hint.className = 'menu-scroll-hint text-sm font-semibold text-mova-muted';
-        hint.innerHTML = '<span>Dos líneas. Una misma forma de cuidarte.</span>';
-        header.lastElementChild.replaceWith(hint);
-    }
-    const viewport = document.createElement('div');
-    viewport.className = 'menu-carousel-viewport';
-    const track = document.createElement('div');
-    track.className = 'menu-carousel-track';
-    track.id = 'menuLineTrack';
-    track.setAttribute('aria-label', 'Líneas de menú. Deslizá horizontalmente para cambiar entre FIT y LOW CARB.');
-    track.tabIndex = 0;
-    const makeWindow = (line, eyebrow, description, items) => {
-        const section = document.createElement('section');
-        section.className = 'menu-window';
-        section.setAttribute('aria-label', `Línea ${line}`);
-        section.innerHTML = `<div class="menu-window-heading"><div><span class="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">${eyebrow}</span><h4>${line}</h4><p class="text-sm text-mova-muted mt-1">${description}</p></div><span class="text-xs font-semibold text-mova-muted">Deslizá para ver la otra línea →</span></div><div class="menu-window-grid"></div>`;
-        const grid = section.querySelector('.menu-window-grid');
-        items.forEach(item => grid.appendChild(item.cloneNode(true)));
-        return section;
-    };
-    track.appendChild(makeWindow('Línea FIT', 'Energía y equilibrio', 'Comidas completas para acompañar tus entrenamientos y tu rutina.', [fitMeal, weeklyPack]));
-    track.appendChild(makeWindow('Línea LOW CARB', 'Liviano, sin resignar sabor', 'Opciones con menos carbohidratos y proteínas de calidad.', [lowCarbMeal, weeklyPack]));
-    viewport.appendChild(track);
-    if (oldGrid) oldGrid.replaceWith(viewport);
-
-    const controls = document.createElement('div');
-    controls.className = 'menu-carousel-controls';
-    controls.innerHTML = '<button type="button" class="menu-prev" aria-label="Ver línea anterior"><i data-lucide="arrow-left"></i></button><div class="menu-carousel-dots" aria-hidden="true"><span class="active"></span><span></span></div><button type="button" class="menu-next" aria-label="Ver línea siguiente"><i data-lucide="arrow-right"></i></button>';
-    viewport.after(controls);
-    const dots = [...controls.querySelectorAll('.menu-carousel-dots span')];
-    const updateDots = () => {
-        const active = Math.round(track.scrollLeft / track.clientWidth);
-        dots.forEach((dot, index) => dot.classList.toggle('active', index === active));
-    };
-    controls.querySelector('.menu-prev').addEventListener('click', () => track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' }));
-    controls.querySelector('.menu-next').addEventListener('click', () => track.scrollBy({ left: track.clientWidth, behavior: 'smooth' }));
-    track.addEventListener('scroll', updateDots, { passive: true });
-    if (window.lucide) lucide.createIcons();
-})();
-</script>
     
     <script id="supplement-catalog-logic">
         let currentSupplementCategory = 'all';
@@ -1252,5 +1078,205 @@
         }
         window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
     </script>
+        <style id="mova-catalog-profile-enhancements">
+        #card1 .mova-menu-intro { display:flex; flex-direction:column; align-items:flex-start; gap:.35rem; }
+        #card1 .mova-profile-shortcut { display:inline-flex; align-items:center; gap:.45rem; margin-top:.4rem; padding:.65rem .9rem; border:1px solid rgba(16,185,129,.42); border-radius:999px; color:#dff8e8; background:rgba(16,185,129,.13); font-size:.72rem; font-weight:800; }
+        #card1 .mova-profile-shortcut:hover { background:#10b981; color:#092015; }
+        .mova-menu-carousel { overflow:hidden; border:1px solid rgba(27,63,41,.13); border-radius:1.5rem; padding:clamp(1rem,2.5vw,1.5rem); background:rgba(255,255,251,.74); box-shadow:0 20px 55px rgba(31,55,35,.08); color:#17221b; }
+        .mova-menu-carousel-head { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:1rem; }
+        .mova-menu-carousel-head h4 { color:#17221b; font-size:clamp(1.4rem,2.7vw,2rem); font-weight:800; letter-spacing:-.04em; }
+        .mova-menu-carousel-head p { color:#5d695f; font-size:.78rem; }
+        .mova-menu-tabs { display:flex; flex-wrap:wrap; gap:.55rem; margin:1rem 0; }
+        .mova-menu-tabs button { border:1px solid rgba(23,34,27,.14); border-radius:999px; padding:.7rem 1rem; color:#3f4b42; background:rgba(255,255,255,.82); font-size:.72rem; font-weight:800; }
+        .mova-menu-tabs button[aria-pressed="true"] { color:#072015; border-color:#10a56e; background:#42d49a; box-shadow:0 6px 18px rgba(16,185,129,.18); }
+        .mova-menu-viewport { overflow:hidden; border-radius:1.1rem; }
+        .mova-menu-track { display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; scrollbar-width:none; overscroll-behavior-x:contain; }
+        .mova-menu-track::-webkit-scrollbar { display:none; }
+        .mova-menu-slide { flex:0 0 100%; width:100%; max-height:min(74svh,820px); min-height:460px; overflow-y:auto; scroll-snap-align:start; padding:.25rem .25rem .75rem; }
+        .mova-menu-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); align-content:start; gap:.9rem; }
+        .mova-menu-slide .menu-item { min-width:0; color:#17221b !important; border:1px solid rgba(23,34,27,.10) !important; border-radius:1rem; background:rgba(255,255,252,.94) !important; box-shadow:0 10px 26px rgba(27,45,32,.07); }
+        .mova-menu-slide .menu-item h4,.mova-menu-slide .menu-item strong { color:#17221b !important; }
+        .mova-menu-slide .menu-item p,.mova-menu-slide .menu-item .text-mova-muted { color:#5a665e !important; }
+        .mova-menu-slide .menu-item .text-mova-cream\/80 { color:#3f4b42 !important; }
+        .mova-menu-slide .menu-item .border-white\/10 { border-color:rgba(23,34,27,.12) !important; }
+        .mova-menu-slide .mova-dish-photo { height:190px !important; object-fit:contain !important; object-position:center; background:#f5f1e8; }
+        .mova-menu-badge { display:inline-flex; margin-bottom:.55rem; border-radius:999px; padding:.35rem .62rem; color:#08714c; background:rgba(16,185,129,.11); font-size:.62rem; font-weight:850; letter-spacing:.1em; text-transform:uppercase; }
+        .mova-menu-controls { display:flex; align-items:center; justify-content:space-between; gap:.7rem; margin-top:.9rem; }
+        .mova-menu-controls button { min-width:42px; min-height:42px; border:1px solid rgba(23,34,27,.14); border-radius:999px; color:#20352a; background:#fff; font-weight:800; }
+        .mova-menu-controls span { color:#667268; font-size:.72rem; font-weight:700; }
+        .mova-pack-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+        .mova-pack-card { display:flex; min-height:220px; flex-direction:column; justify-content:space-between; gap:.8rem; padding:1.25rem; border:1px solid rgba(23,34,27,.12); border-radius:1.2rem; background:linear-gradient(145deg,#fff,#edf6ec); box-shadow:0 10px 28px rgba(27,45,32,.07); }
+        .mova-pack-card h5 { color:#17221b; font-size:1.15rem; font-weight:850; }
+        .mova-pack-card p { color:#59665d; font-size:.8rem; }
+        .mova-pack-card strong { color:#08714c; font-size:1.25rem; }
+        .mova-pack-card button { align-self:flex-start; border-radius:.8rem; padding:.75rem 1rem; color:#062217; background:#42d49a; font-size:.76rem; font-weight:850; }
+        #card2 > .glass-panel { position:relative; isolation:isolate; overflow:hidden; background:rgba(8,14,11,.87) !important; }
+        #card2 > .glass-panel::before { content:""; position:absolute; z-index:-1; inset:-20px; background:linear-gradient(110deg,rgba(4,11,8,.94),rgba(6,14,10,.80)),url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1600&auto=format&fit=crop') center/cover; filter:blur(6px); transform:scale(1.05); }
+        #card2 > .glass-panel > * { position:relative; z-index:1; }
+        #card2 .mova-avatar-panel { margin-bottom:1.4rem; padding:1.1rem; border:1px solid rgba(255,255,255,.13); border-radius:1.25rem; background:rgba(7,13,10,.72); backdrop-filter:blur(8px); }
+        #card2 .mova-avatar-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:.8rem; }
+        #card2 .mova-avatar-gender { display:flex; gap:.45rem; }
+        #card2 .mova-avatar-gender button { border:1px solid rgba(255,255,255,.16); border-radius:999px; padding:.5rem .75rem; color:#e5eee8; background:rgba(255,255,255,.06); font-size:.68rem; font-weight:800; }
+        #card2 .mova-avatar-gender button[aria-pressed="true"] { border-color:#10b981; color:#062217; background:#42d49a; }
+        #card2 .mova-avatar-grid { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:.65rem; margin-top:.9rem; }
+        #card2 .mova-avatar-choice { display:flex; min-height:100px; flex-direction:column; align-items:center; justify-content:center; gap:.4rem; border:1px solid rgba(255,255,255,.12); border-radius:1rem; color:#eff7f1; background:linear-gradient(145deg,rgba(24,43,33,.94),rgba(12,20,16,.95)); font-size:.7rem; font-weight:750; }
+        #card2 .mova-avatar-choice[aria-pressed="true"] { border-color:#34d399; box-shadow:0 0 0 2px rgba(52,211,153,.16); background:linear-gradient(145deg,rgba(18,78,54,.95),rgba(12,32,22,.96)); }
+        #card2 .mova-avatar-choice span { font-size:1.75rem; line-height:1; }
+        #card2 .mova-avatar-selected { display:flex; align-items:center; gap:.75rem; margin-top:.9rem; color:#cbd8cf; font-size:.72rem; }
+        #card2 .mova-avatar-selected strong { color:#7de7b7; }
+        #card2 .mova-avatar-preview-icon { display:grid; width:42px; height:42px; place-items:center; border:1px solid rgba(52,211,153,.35); border-radius:50%; background:rgba(16,185,129,.14); font-size:1.35rem; }
+        @media(max-width:850px) { .mova-menu-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } #card2 .mova-avatar-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+        @media(max-width:600px) { .mova-menu-carousel-head { align-items:flex-start; flex-direction:column; } .mova-menu-slide { min-height:420px; max-height:72svh; } .mova-menu-grid,.mova-pack-grid { grid-template-columns:1fr; } .mova-menu-slide .mova-dish-photo { height:190px !important; object-fit:contain !important; object-position:center; background:#f5f1e8; } #card2 .mova-avatar-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    </style>
+    <script id="mova-photo-mapping-script">
+        (() => {
+            const photos = new Map([
+                ['Chuleta con ensalada tibia de brócoli', 'menus/mova-menu-01-chuleta-brocoli.jpg'],
+                ['Pollo gratinado con brócoli y arroz', 'menus/mova-menu-02-pollo-brocoli-arroz.jpg'],
+                ['Fideos con bolognesa', 'menus/mova-menu-03-fideos-bolognesa.jpg'],
+                ['Bondiola glaseada con puré mixto', 'menus/mova-menu-04-bondiola-pure-mixto.jpg']
+            ]);
+            document.querySelectorAll('#card1 .menu-item').forEach(card => {
+                const title = card.querySelector('h4')?.textContent.trim();
+                const placeholder = card.querySelector('.w-full.h-28');
+                const src = photos.get(title);
+                if (!src || !placeholder) return;
+                const image = document.createElement('img');
+                image.className = 'mova-dish-photo w-full h-28 rounded-xl mb-3';
+                image.src = src;
+                image.alt = title;
+                image.loading = 'lazy';
+                placeholder.replaceWith(image);
+            });
+        })();
+    </script>
+    <script id="mova-three-view-menu-carousel">
+        (() => {
+            const card = document.getElementById('card1');
+            if (!card || card.dataset.movaCarouselReady) return;
+            const oldLines = [...card.querySelectorAll('.consumer-line')];
+            if (oldLines.length < 2) return;
+            const menuSets = oldLines.slice(0, 2).map(line => [...line.querySelectorAll('.consumer-grid .menu-item')]);
+            if (menuSets.some(items => items.length !== 20)) {
+                console.warn('MOVA: se esperaba un catálogo de 20 menús por línea.');
+            }
+            const intro = card.querySelector('.glass-panel > div.mb-6.pb-4');
+            if (intro) {
+                intro.classList.add('mova-menu-intro');
+                const shortcut = document.createElement('button');
+                shortcut.type = 'button';
+                shortcut.className = 'mova-profile-shortcut';
+                shortcut.innerHTML = '<i data-lucide="user-round" class="w-4 h-4"></i><span>¿Buscás tu perfil? Ir a Mi perfil</span>';
+                shortcut.addEventListener('click', () => window.switchTab?.(2));
+                intro.append(shortcut);
+            }
+            const carousel = document.createElement('section');
+            carousel.className = 'mova-menu-carousel';
+            carousel.setAttribute('aria-label', 'Carrusel de menús FIT, LOW CARB y packs');
+            carousel.innerHTML = `
+                <div class="mova-menu-carousel-head"><div><span class="mova-menu-badge">MOVA · alimentación</span><h4>Elegí tu forma de comer rico</h4><p>Dos líneas de platos y una opción de packs. Los aportes son estimaciones orientativas.</p></div></div>
+                <div class="mova-menu-tabs" role="tablist" aria-label="Líneas del catálogo">
+                    <button type="button" role="tab" data-mova-slide="0" aria-pressed="true">1 · Línea FIT</button>
+                    <button type="button" role="tab" data-mova-slide="1" aria-pressed="false">2 · Línea LOW CARB</button>
+                    <button type="button" role="tab" data-mova-slide="2" aria-pressed="false">3 · Packs</button>
+                </div>
+                <div class="mova-menu-viewport"><div class="mova-menu-track">
+                    <section class="mova-menu-slide" role="tabpanel" aria-label="Línea FIT"><span class="mova-menu-badge">FIT · 20 menús</span><div class="mova-menu-grid mova-fit-grid"></div></section>
+                    <section class="mova-menu-slide" role="tabpanel" aria-label="Línea LOW CARB"><span class="mova-menu-badge">LOW CARB · 20 menús</span><p class="text-xs text-mova-muted mb-3">Porciones ajustadas y carbohidratos estimados para esta línea.</p><div class="mova-menu-grid mova-lowcarb-grid"></div></section>
+                    <section class="mova-menu-slide" role="tabpanel" aria-label="Packs"><span class="mova-menu-badge">Ahorro por pack · $7.500 por menú</span><p class="text-xs text-mova-muted mb-4">Elegí packs FIT o LOW CARB en formato de 5 o 10 platos.</p><div class="mova-pack-grid">
+                        <article class="mova-pack-card"><div><span class="mova-menu-badge">FIT</span><h5>Pack de 5 menús</h5><p>5 platos a elección · $7.500 por menú</p></div><div><strong>$37.500</strong><br><button type="button" onclick="addToCart('Pack 5 FIT',37500)">Agregar pack</button></div></article>
+                        <article class="mova-pack-card"><div><span class="mova-menu-badge">FIT</span><h5>Pack de 10 menús</h5><p>10 platos a elección · $7.500 por menú</p></div><div><strong>$75.000</strong><br><button type="button" onclick="addToCart('Pack 10 FIT',75000)">Agregar pack</button></div></article>
+                        <article class="mova-pack-card"><div><span class="mova-menu-badge">LOW CARB</span><h5>Pack de 5 menús</h5><p>5 platos a elección · $7.500 por menú</p></div><div><strong>$37.500</strong><br><button type="button" onclick="addToCart('Pack 5 LOW CARB',37500)">Agregar pack</button></div></article>
+                        <article class="mova-pack-card"><div><span class="mova-menu-badge">LOW CARB</span><h5>Pack de 10 menús</h5><p>10 platos a elección · $7.500 por menú</p></div><div><strong>$75.000</strong><br><button type="button" onclick="addToCart('Pack 10 LOW CARB',75000)">Agregar pack</button></div></article>
+                    </div></section>
+                </div></div>
+                <div class="mova-menu-controls"><button type="button" data-mova-prev aria-label="Vista anterior">‹</button><span data-mova-indicator>Vista 1 de 3</span><button type="button" data-mova-next aria-label="Vista siguiente">›</button></div>
+            `;
+            oldLines[0].replaceWith(carousel);
+            oldLines.slice(1).forEach(line => line.remove());
+            const fitGrid = carousel.querySelector('.mova-fit-grid');
+            const carbGrid = carousel.querySelector('.mova-lowcarb-grid');
+            menuSets[0].forEach(item => fitGrid.append(item.cloneNode(true)));
+            menuSets[1].forEach(item => {
+                const clone = item.cloneNode(true);
+                const portion = clone.querySelector('p');
+                const spans = [...clone.querySelectorAll('.grid span')];
+                const portionMatch = portion?.textContent.match(/([\d.]+)\s*g/i);
+                const kcalMatch = spans[0]?.textContent.match(/([\d.]+)\s*kcal/i);
+                const carbMatch = spans.find(s => /Carbohidratos/i.test(s.textContent))?.textContent.match(/([\d.]+)\s*g/i);
+                if (portionMatch && kcalMatch && carbMatch) {
+                    const oldCarbs = Number(carbMatch[1]);
+                    const newCarbs = Math.max(10, Math.round(oldCarbs * 0.65));
+                    const savedCalories = Math.round((oldCarbs - newCarbs) * 4);
+                    const newKcal = Math.max(250, Number(kcalMatch[1]) - savedCalories);
+                    const newPortion = Math.max(250, Number(portionMatch[1]) - Math.max(20, Math.round((oldCarbs - newCarbs) * 1.5)));
+                    portion.textContent = `Porción aproximada LOW CARB: ${newPortion} g`;
+                    spans[0].textContent = `≈ ${newKcal} kcal`;
+                    const carbSpan = spans.find(s => /Carbohidratos/i.test(s.textContent));
+                    if (carbSpan) carbSpan.textContent = `Carbohidratos ${newCarbs} g`;
+                }
+                carbGrid.append(clone);
+            });
+            const track = carousel.querySelector('.mova-menu-track');
+            const tabs = [...carousel.querySelectorAll('[data-mova-slide]')];
+            const indicator = carousel.querySelector('[data-mova-indicator]');
+            let active = 0;
+            const showSlide = index => {
+                active = Math.max(0, Math.min(2, index));
+                track.scrollTo({ left: active * track.clientWidth, behavior: 'smooth' });
+                tabs.forEach((tab, i) => tab.setAttribute('aria-pressed', String(i === active)));
+                indicator.textContent = `Vista ${active + 1} de 3`;
+            };
+            tabs.forEach(tab => tab.addEventListener('click', () => showSlide(Number(tab.dataset.movaSlide))));
+            carousel.querySelector('[data-mova-prev]').addEventListener('click', () => showSlide(active - 1));
+            carousel.querySelector('[data-mova-next]').addEventListener('click', () => showSlide(active + 1));
+            track.addEventListener('scroll', () => {
+                const index = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+                if (index !== active) {
+                    active = index;
+                    tabs.forEach((tab, i) => tab.setAttribute('aria-pressed', String(i === active)));
+                    indicator.textContent = `Vista ${active + 1} de 3`;
+                }
+            }, { passive: true });
+            card.dataset.movaCarouselReady = 'true';
+            if (window.lucide) window.lucide.createIcons();
+        })();
+    </script>
+    <script id="mova-profile-avatar-selector">
+        (() => {
+            const card = document.getElementById('card2');
+            const profileGrid = card?.querySelector('.profile-grid');
+            if (!card || !profileGrid || card.querySelector('.mova-avatar-panel')) return;
+            const styles = [
+                { id:'fit', name:'Fit', male:'🏋️‍♂️', female:'🏋️‍♀️' },
+                { id:'gamer', name:'Gamer', male:'👨‍💻', female:'👩‍💻' },
+                { id:'gothic', name:'Gótico', male:'🧛‍♂️', female:'🧛‍♀️' },
+                { id:'aesthetic', name:'Aesthetic', male:'👨‍🎨', female:'👩‍🎨' },
+                { id:'urbano', name:'Urbano', male:'🕺', female:'💃' },
+                { id:'zen', name:'Zen', male:'🧘‍♂️', female:'🧘‍♀️' }
+            ];
+            let gender = 'male';
+            let selected = 'fit';
+            try { gender = localStorage.getItem('movaAvatarGender') || gender; selected = localStorage.getItem('movaAvatarStyle') || selected; } catch (_) {}
+            const panel = document.createElement('section');
+            panel.className = 'mova-avatar-panel';
+            panel.innerHTML = `<div class="mova-avatar-heading"><div><span class="text-xs font-bold uppercase tracking-widest text-mova-emerald">Personalizá tu espacio</span><h4 class="text-lg font-brand font-bold text-mova-cream mt-1">Elegí tu avatar MOVA</h4></div><div class="mova-avatar-gender" role="group" aria-label="Versión de avatar"><button type="button" data-gender="male">Masculina</button><button type="button" data-gender="female">Femenina</button></div></div><div class="mova-avatar-grid" role="group" aria-label="Seis estilos de avatar"></div><div class="mova-avatar-selected" aria-live="polite"></div><p class="text-[10px] text-mova-muted mt-2">Selector visual de demostración; no crea una cuenta ni almacena contraseñas.</p>`;
+            profileGrid.before(panel);
+            const grid = panel.querySelector('.mova-avatar-grid');
+            const render = () => {
+                panel.querySelectorAll('[data-gender]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.gender === gender)));
+                grid.innerHTML = styles.map(style => `<button type="button" class="mova-avatar-choice" data-style="${style.id}" aria-pressed="${style.id === selected}"><span aria-hidden="true">${style[gender]}</span><span>${style.name}</span></button>`).join('');
+                panel.querySelector('.mova-avatar-selected').innerHTML = `<span class="mova-avatar-preview-icon" aria-hidden="true">${styles.find(style => style.id === selected)?.[gender] || '🏋️‍♂️'}</span><span>Avatar elegido: <strong>${styles.find(style => style.id === selected)?.name || 'Fit'} · versión ${gender === 'male' ? 'masculina' : 'femenina'}</strong></span>`;
+                grid.querySelectorAll('[data-style]').forEach(button => button.addEventListener('click', () => { selected = button.dataset.style; persist(); render(); }));
+            };
+            const persist = () => { try { localStorage.setItem('movaAvatarGender', gender); localStorage.setItem('movaAvatarStyle', selected); } catch (_) {} };
+            panel.querySelectorAll('[data-gender]').forEach(button => button.addEventListener('click', () => { gender = button.dataset.gender; persist(); render(); }));
+            render();
+            const heading = card.querySelector('h3');
+            if (heading) heading.textContent = 'Mi perfil MOVA · salud y entrenamiento';
+        })();
+    </script>
 </body>
 </html>
+
+
