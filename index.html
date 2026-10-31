@@ -538,19 +538,19 @@
                             <h4 class="text-xs font-bold uppercase tracking-wider text-mova-muted border-b border-white/10 pb-2">Datos Personales & Envío</h4>
                             <div>
                                 <label class="block text-xs text-mova-cream/80 mb-1">Nombre Completo</label>
-                                <input type="text" id="profName" value="Arnaldo R." class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                <input type="text" id="profName" placeholder="Tu nombre y apellido" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
                             </div>
                             <div>
                                 <label class="block text-xs text-mova-cream/80 mb-1">Correo Electrónico</label>
-                                <input type="email" id="profEmail" value="arnaldo@mova.com" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                <input type="email" id="profEmail" placeholder="Correo de tu cuenta" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
                             </div>
                             <div>
                                 <label class="block text-xs text-mova-cream/80 mb-1">Teléfono / WhatsApp</label>
-                                <input type="tel" id="profPhone" value="+54 9 11 5422-9800" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                <input type="tel" id="profPhone" placeholder="Tu teléfono" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
                             </div>
                             <div>
                                 <label class="block text-xs text-mova-cream/80 mb-1">Dirección de Entrega</label>
-                                <input type="text" id="profAddress" value="Av. Libertador 4500, CABA" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
+                                <input type="text" id="profAddress" placeholder="Tu dirección de entrega" class="w-full bg-mova-dark/80 border border-white/10 rounded-xl px-3.5 py-2 text-sm text-mova-cream focus:outline-none focus:border-mova-emerald">
                             </div>
                         </div>
 
@@ -680,6 +680,7 @@
             <div class="text-center mb-6">
                 <h2 class="font-brand font-extrabold text-2xl tracking-wider text-mova-cream">M O V A <span class="text-mova-emerald">.</span></h2>
                 <p class="text-xs text-mova-muted mt-1">Ingresá a tu espacio de nutrición y entrenamiento</p>
+                <p class="text-[10px] text-mova-muted mt-2">Acceso de demostración: no crea una cuenta ni guarda contraseñas. Para habilitar acceso real se debe conectar un servicio seguro como Supabase.</p>
             </div>
 
             <div class="grid grid-cols-2 bg-mova-dark/80 p-1 rounded-xl mb-6 border border-white/5">
@@ -724,7 +725,8 @@
             </form>
 
             <div class="mt-4 pt-4 border-t border-white/5 text-center">
-                
+                <button type="button" onclick="continueAsGuest()" class="w-full rounded-xl border border-white/15 bg-white/5 py-2.5 text-xs font-bold text-mova-cream hover:border-mova-emerald hover:text-mova-emerald">Continuar como invitado</button>
+                <p class="mt-2 text-[10px] text-mova-muted">Podés explorar MOVA sin crear una cuenta.</p>
             </div>
         </div>
     </div>
@@ -746,15 +748,19 @@
                 <div id="cartItemsList" class="space-y-3 max-h-[55vh] overflow-y-auto pr-1"></div>
             </div>
 
-            <div class="pt-4 border-t border-white/10">
-                <div class="flex items-center justify-between mb-4">
-                    <span class="text-sm text-mova-muted">Subtotal</span>
-                    <span id="cartTotal" class="text-2xl font-bold text-mova-cream">$0</span>
+            <div class="mova-cart-checkout pt-4 border-t border-white/10">
+                <div class="space-y-2 mb-4 text-xs">
+                    <div class="flex items-center justify-between text-mova-muted"><span>Subtotal sin descuentos</span><span id="cartSubtotal">$0</span></div>
+                    <div class="flex items-center justify-between text-emerald-300"><span>Descuentos</span><span id="cartDiscount">$0</span></div>
+                    <div class="flex items-center justify-between border-t border-white/10 pt-2 text-mova-cream"><strong>Total a pagar</strong><strong id="cartTotal" class="text-xl">$0</strong></div>
                 </div>
-                <button onclick="alert('¡Proceso de compra iniciado con éxito! Redirigiendo a pasarela de pago...')" class="w-full bg-mova-emerald hover:bg-mova-cream text-mova-dark font-bold py-3.5 rounded-xl transition flex items-center justify-center space-x-2">
-                    <span>Confirmar Pedido</span>
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+                <fieldset class="mb-3"><legend class="mb-2 text-[11px] font-bold text-mova-cream">Medio de pago</legend><div class="grid grid-cols-2 gap-1.5 text-[10px] text-mova-cream/80">
+                    <label class="mova-payment-option"><input type="radio" name="movaPaymentMethod" value="Transferencia" checked> Transferencia</label><label class="mova-payment-option"><input type="radio" name="movaPaymentMethod" value="Mercado Pago"> Mercado Pago</label><label class="mova-payment-option"><input type="radio" name="movaPaymentMethod" value="Débito"> Débito</label><label class="mova-payment-option"><input type="radio" name="movaPaymentMethod" value="Crédito"> Crédito</label><label class="mova-payment-option"><input type="radio" name="movaPaymentMethod" value="QR"> QR</label>
+                </div><p class="mt-1.5 text-[9px] text-mova-muted">Opciones de muestra; la pasarela y los datos de cobro deben configurarse.</p></fieldset>
+                <label class="mova-receipt-upload">Adjuntar comprobante (imagen o PDF)<input id="movaReceiptFile" type="file" accept="image/*,.pdf,application/pdf" onchange="movaReceiptSelected(event)"></label>
+                <p id="movaReceiptStatus" class="mt-1.5 min-h-4 text-[9px] text-mova-muted">El comprobante se adjunta manualmente en WhatsApp.</p>
+                <button id="movaSendReceipt" type="button" onclick="movaPrepareWhatsAppReceipt()" class="mt-2 w-full rounded-xl bg-mova-emerald py-3 text-xs font-extrabold text-mova-dark hover:bg-mova-cream">Continuar a WhatsApp</button>
+                <p class="mt-1.5 text-center text-[9px] leading-relaxed text-mova-muted">Se abrirá un mensaje con tu pedido. Adjuntá el archivo allí y confirmá el envío.</p>
             </div>
         </div>
     </div>
@@ -941,8 +947,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#9ca3af', font: { size: 9 } } },
-                        y: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#9ca3af', font: { size: 9 } } }
+                        x: { grid: { display: false }, ticks: { color: '#e1e9e2', font: { size: 9 } } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.12)' }, ticks: { color: '#e1e9e2', font: { size: 9 } } }
                     }
                 }
             });
@@ -985,11 +991,15 @@
         }
 
         function addToCart(title, price) {
+            const productCard = [...document.querySelectorAll('#card0 [data-product-card]')].find(card => title.startsWith(card.querySelector('h4')?.textContent.trim() || '\u0000'));
+            const regularText = productCard?.querySelector('del')?.textContent || '';
+            const regularPrice = Number(regularText.replace(/\D/g, '')) || price;
             const existing = cart.find(i => i.title === title);
             if (existing) {
                 existing.qty++;
+                existing.regularPrice = Math.max(existing.regularPrice || 0, regularPrice);
             } else {
-                cart.push({ title, price, qty: 1 });
+                cart.push({ title, price, qty: 1, regularPrice });
             }
             renderCart();
             toggleCartDrawer();
@@ -1276,6 +1286,239 @@
             if (heading) heading.textContent = 'Mi perfil MOVA · salud y entrenamiento';
         })();
     </script>
+<script id="mova-navigation-catalog-updates">
+(() => {
+  const style = document.createElement('style');
+  style.textContent = `
+    body{padding-top:76px}
+    .mova-topbar{position:fixed;z-index:60;inset:0 0 auto;min-height:72px;padding:.7rem clamp(1rem,4vw,3.5rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;background:rgba(10,16,13,.93);border-bottom:1px solid rgba(255,255,255,.09);backdrop-filter:blur(18px)}
+    .mova-topbar-left,.mova-topbar-right{display:flex;align-items:center;gap:.7rem;min-width:0}.mova-brandmark{color:#f5f3e9;background:transparent;border:0;font-size:1.3rem;font-weight:900;letter-spacing:.12em;white-space:nowrap}.mova-brandmark b{color:#10b981}
+    .mova-dropdown{position:relative;color:#f5f3e9}.mova-dropdown>summary{list-style:none;display:flex;align-items:center;gap:.5rem;cursor:pointer;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:.65rem .9rem;background:rgba(255,255,255,.055);font-size:.74rem;font-weight:750;white-space:nowrap}.mova-dropdown>summary::-webkit-details-marker{display:none}.mova-dropdown[open]>summary{border-color:#10b981;background:rgba(16,185,129,.14)}
+    .mova-dropdown-panel{position:absolute;top:calc(100% + .6rem);left:0;width:min(310px,calc(100vw - 2rem));padding:.55rem;border:1px solid rgba(255,255,255,.12);border-radius:1rem;background:rgba(13,20,16,.98);box-shadow:0 24px 60px #0007;backdrop-filter:blur(18px)}.mova-profile-panel{left:auto;right:0;width:min(285px,calc(100vw - 2rem))}.mova-dropdown-panel button{width:100%;display:flex;align-items:center;gap:.7rem;text-align:left;padding:.68rem .72rem;border:0;border-radius:.68rem;color:#edf2e9;background:transparent;font-size:.73rem}.mova-dropdown-panel button:hover{background:#10b98122;color:#65e6ad}.mova-dropdown-panel button>span{width:1.45rem;color:#62dba6;font-size:.65rem;text-align:center}.mova-dropdown-label{padding:.45rem .72rem .25rem;color:#87958b;font-size:.59rem;font-weight:850;letter-spacing:.16em;text-transform:uppercase}.mova-contact-hint{margin:.3rem .7rem .5rem;color:#9aa69d;font-size:.63rem}.mova-login-btn,.mova-register-btn,.mova-cart-btn{border-radius:999px;padding:.68rem .95rem;font-size:.72rem;font-weight:800}.mova-login-btn{border:1px solid #ffffff38;color:#f4f4eb;background:transparent}.mova-register-btn{border:1px solid #10b981;color:#07140d;background:#10b981}.mova-cart-btn{padding:.62rem;border:1px solid #ffffff20;color:#f4f4eb;background:#ffffff0e}.mova-profile-dot{width:1.35rem;height:1.35rem;display:grid;place-items:center;border-radius:50%;color:#0b1510;background:#10b981;font-size:.62rem;font-weight:900}.mova-logout{margin-top:.35rem;border-top:1px solid #ffffff15!important;color:#fca5a5!important}
+    .mova-brand-menu{position:relative;z-index:5;margin:0 0 1rem;padding:.9rem 1rem;border:1px solid #ffffff20;border-radius:1rem;background:#0004}.mova-brand-menu summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:#f3f4ed;font-size:.8rem;font-weight:800}.mova-brand-options{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:.8rem}.mova-brand-options button{border:1px solid #10b98155;border-radius:999px;padding:.55rem .8rem;color:#dff9e9;background:#10b98118;font-size:.68rem;font-weight:750}.mova-brand-options button:disabled{opacity:.6;cursor:not-allowed}.mova-stock-tools{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem;margin-top:.75rem;padding-top:.75rem;border-top:1px solid #ffffff15;color:#a9b4ab;font-size:.65rem}.mova-stock-tools button,.mova-stock-tools label{cursor:pointer;border:1px solid #ffffff22;border-radius:.65rem;padding:.5rem .65rem;color:#eaf1e8;background:#ffffff0d;font-weight:750}.mova-stock-tools input{display:none}.mova-stock-note{flex-basis:100%;line-height:1.45}.mova-stock-status{margin:.55rem 0;padding:.48rem .62rem;border-radius:.65rem;color:#16603d;background:#e8f6eb;font-size:.67rem;font-weight:750}.mova-product-detail{margin-top:.65rem;padding:.65rem .7rem;border:1px solid #ffffff1c;border-radius:.75rem;color:#d8e1d9;background:#080e0a66;font-size:.67rem}.mova-product-detail summary{cursor:pointer;font-weight:800;color:#9be8bf}.mova-product-detail p{margin:.5rem 0;color:#b8c3ba;line-height:1.45}.mova-product-detail table{width:100%;border-collapse:collapse;margin-top:.5rem;font-size:.63rem}.mova-product-detail td{padding:.28rem;border-bottom:1px solid #ffffff14}.mova-product-detail td:last-child{text-align:right}
+    .mova-menu-nutrition{margin-top:.65rem;padding:.62rem .72rem;border:1px solid #1f593326;border-radius:.8rem;background:#ffffffc7;color:#26382c;font-size:.67rem}.mova-menu-nutrition summary{cursor:pointer;color:#17633f;font-weight:850}.mova-menu-nutrition .mova-macro-percent{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;margin-top:.5rem}.mova-menu-nutrition .mova-macro-percent span{padding:.35rem .25rem;border-radius:.45rem;text-align:center;background:#e5f2e4;font-size:.6rem;font-weight:800}.mova-menu-nutrition .mova-energy-note{margin:.4rem 0 0;color:#69786c;font-size:.58rem}.mova-focus-target{outline:2px solid #10b981;outline-offset:5px;transition:outline .3s}
+    @media(max-width:600px){body{padding-top:68px}.mova-topbar{min-height:64px;padding:.55rem .65rem;gap:.4rem}.mova-topbar-left,.mova-topbar-right{gap:.4rem}.mova-brandmark{font-size:1rem}.mova-dropdown>summary{padding:.58rem .65rem;gap:.35rem;font-size:.65rem}.mova-explore-dropdown>summary span{display:none}.mova-login-btn,.mova-register-btn{padding:.58rem .62rem;font-size:.62rem}.mova-cart-btn{padding:.55rem}}
+  `;
+  document.head.appendChild(style);
+
+  const menuPhotos = new Map([
+    ['Salteado de cerdo','menus/mova-menu-07-salteado-cerdo.jpg'],
+    ['Pollo a la criolla con arroz','menus/mova-menu-08-pollo-criolla-arroz.jpg'],
+    ['Risotto integral de hongos','menus/mova-menu-11-risotto-hongos.jpg'],
+    ['Salteado de vegetales y arroz','menus/mova-menu-13-vegetales-arroz.jpg'],
+    ['Salteado de vegetales y fideos','menus/mova-menu-14-vegetales-fideos.jpg'],
+    ['Pollo con hongos y batatas al horno','menus/mova-menu-15-pollo-hongos-batata.jpg'],
+    ['Pollo napolitano con puré de batata','menus/mova-menu-16-pollo-napolitano-batata.jpg'],
+    ['Chuleta napolitana con puré de batata','menus/mova-menu-18-chuleta-napolitana-batata.jpg']
+  ]);
+  document.querySelectorAll('#card1 .mova-menu-grid .menu-item').forEach(item=>{
+    const title=item.querySelector('h4')?.textContent.trim();const src=menuPhotos.get(title);
+    if(title==='Bondiola glaseada con puré mixto'){
+      const oldImage=item.querySelector('.mova-dish-photo');
+      if(oldImage){const placeholder=document.createElement('div');placeholder.className='w-full h-28 rounded-xl bg-mova-deep flex items-center justify-center mb-3';placeholder.innerHTML='<i data-lucide="utensils" class="w-12 h-12 text-mova-emerald/50"></i>';oldImage.replaceWith(placeholder)}
+      return;
+    }
+    if(!src)return;
+    let image=item.querySelector('.mova-dish-photo');
+    if(!image){const placeholder=item.querySelector('.w-full.h-28');if(!placeholder)return;image=document.createElement('img');image.className='mova-dish-photo w-full rounded-xl mb-3';image.style.cssText='height:190px;width:100%;object-fit:contain;object-position:center;background:#f5f1e8';placeholder.replaceWith(image)}
+    image.src=src;image.alt=title;image.loading='lazy';
+  });
+
+  const oldHeader = document.querySelector('header');
+  oldHeader.outerHTML = `<header class="mova-topbar">
+    <div class="mova-topbar-left">
+      <details class="mova-dropdown mova-explore-dropdown"><summary aria-label="Abrir menú de navegación"><i data-lucide="menu" class="w-4 h-4"></i><span>Explorar</span><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></summary>
+        <div class="mova-dropdown-panel"><button onclick="movaNavigate(0,'#heroSection')"><span>01</span><b>Quiénes somos</b></button><div class="mova-dropdown-label">Nuestros productos</div><button onclick="movaNavigate(0,'#brandMenu')"><span>02</span><b>Suplementos nutricionales</b></button><button onclick="movaNavigate(1,'#movaMenuCarousel')"><span>03</span><b>Menús FIT &amp; LOW CARB</b></button><div class="mova-dropdown-label">Contacto</div><button onclick="movaNavigate(0,'#contactsFooter')"><span>↗</span><b>WhatsApp · Instagram · Dirección</b></button><p class="mova-contact-hint">Canales oficiales pendientes de agregar.</p></div>
+      </details>
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="mova-brandmark">M O V A <b>.</b></button>
+    </div>
+    <nav class="mova-topbar-right"><div id="authNav" class="flex items-center gap-2"><button onclick="openAuthModal();setAuthMode('login')" class="mova-login-btn">Iniciar sesión</button><button onclick="openAuthModal();setAuthMode('register')" class="mova-register-btn">Registrarse</button></div>
+      <details id="profileNav" class="mova-dropdown mova-profile-dropdown hidden"><summary><span class="mova-profile-dot">M</span><span id="headerUserName">Mi perfil</span><i data-lucide="chevron-down" class="w-3.5 h-3.5"></i></summary><div class="mova-dropdown-panel mova-profile-panel"><div class="mova-dropdown-label">Mi cuenta</div><button onclick="movaProfileNavigate('account')"><span>⚙</span><b>Configuración de cuenta</b></button><button onclick="movaProfileNavigate('personal')"><span>01</span><b>Datos personales</b></button><button onclick="movaProfileNavigate('nutrition')"><span>02</span><b>Perfil nutricional</b></button><button onclick="movaProfileNavigate('activity')"><span>03</span><b>Perfil de actividad</b></button><button class="mova-logout" onclick="movaDemoLogout()">Cerrar sesión de demostración</button></div></details>
+      <button onclick="toggleCartDrawer()" aria-label="Abrir carrito" class="mova-cart-btn relative"><i data-lucide="shopping-bag" class="w-5 h-5"></i><span id="cartBadge" class="absolute -top-1 -right-1 bg-mova-emerald text-mova-dark text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center">0</span></button></nav>
+  </header>`;
+
+  const hero = document.querySelector('body > section');
+  if (hero) hero.id = 'heroSection';
+  const footer = document.querySelector('footer');
+  if (footer) {
+    footer.id = 'contactsFooter';
+    const contact = document.createElement('p');
+    contact.className = 'mt-2';
+    contact.textContent = 'Contacto oficial: WhatsApp, Instagram y dirección pendientes de confirmar para la versión pública.';
+    footer.append(contact);
+  }
+
+  const oldCompleteAccess = window.completeAccess;
+  if (oldCompleteAccess) window.completeAccess = function(mode,email){
+    oldCompleteAccess(mode,email);
+    document.getElementById('authNav').classList.add('hidden');
+    document.getElementById('profileNav').classList.remove('hidden');
+  };
+  window.movaNavigate = (tab,target) => {
+    document.querySelectorAll('.mova-dropdown[open]').forEach(menu => menu.removeAttribute('open'));
+    window.switchTab(tab);
+    setTimeout(() => document.querySelector(target)?.scrollIntoView({behavior:'smooth',block:'start'}),300);
+  };
+  window.movaProfileNavigate = key => {
+    document.querySelectorAll('.mova-dropdown[open]').forEach(menu => menu.removeAttribute('open'));
+    window.switchTab(2);
+    setTimeout(() => {
+      const targets={account:document.querySelector('#card2 .mova-avatar-panel')||document.querySelector('#card2 button[onclick="saveProfileData()"]'),personal:document.getElementById('profilePersonal'),nutrition:document.getElementById('profileNutrition'),activity:document.getElementById('profileActivity')};
+      targets[key]?.scrollIntoView({behavior:'smooth',block:'center'});targets[key]?.classList.add('mova-focus-target');setTimeout(()=>targets[key]?.classList.remove('mova-focus-target'),1400);
+    },380);
+  };
+  window.movaDemoLogout = () => {document.getElementById('profileNav').classList.add('hidden');document.getElementById('authNav').classList.remove('hidden');document.getElementById('headerUserName').textContent='Mi perfil';};
+  const profileCols=document.querySelectorAll('#card2 .profile-grid > div');
+  if(profileCols.length>=2){profileCols[0].id='profilePersonal';profileCols[1].id='profileNutrition';const activity=document.getElementById('profTrainingDays');activity?.closest('.grid')?.setAttribute('id','profileActivity');}
+
+  const toolbar=document.querySelector('#card0 .catalog-toolbar');
+  if(toolbar){const brands=document.createElement('details');brands.id='brandMenu';brands.className='mova-brand-menu';brands.open=true;brands.innerHTML='<summary><span>Marcas y productos</span><span>Desplegar listado ↓</span></summary><div class="mova-brand-options"><button type="button" onclick="document.getElementById(\'supplementGrid\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">Star Nutrition · catálogo de referencia</button><button type="button" disabled title="Agregar datos cuando se comparta el catálogo propio">Catálogo MOVA · pendiente de datos</button></div><div class="mova-stock-tools"><button type="button" onclick="movaDownloadStockTemplate()">Descargar plantilla de stock CSV</button><label for="movaStockFile">Actualizar desde Excel (CSV) <input id="movaStockFile" type="file" accept=".csv,text/csv" onchange="movaImportStock(event)"></label><span id="movaStockMessage" class="mova-stock-note">El catálogo actual es una referencia de muestra. El stock cargado se conserva solo en este navegador.</span></div>';
+    toolbar.parentNode.insertBefore(brands,toolbar);}
+
+  const storageKey='movaDemoStock';const cards=[...document.querySelectorAll('#card0 [data-product-card]')];
+  const normalize=value=>String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
+  const inventory=(()=>{try{return JSON.parse(localStorage.getItem(storageKey)||'{}')}catch(_){return {}}})();
+  cards.forEach(card=>{const name=card.querySelector('h4')?.textContent.trim();if(!name)return;card.dataset.productName=name;const info=card.querySelector('.catalog-product-info')||card.querySelector('.catalog-feature-copy');if(!info||info.querySelector('.mova-product-detail'))return;
+    const qty=inventory[normalize(name)];const stock=document.createElement('div');stock.className='mova-stock-status';stock.textContent=Number.isFinite(qty)?(qty>0?'Stock disponible: '+qty+' unidades':'Sin stock'):'Stock: consultar disponibilidad';
+    const detail=document.createElement('details');detail.className='mova-product-detail';detail.innerHTML='<summary>Reseña, información nutricional y stock</summary><p>Producto de referencia. Consultá el envase para conocer ingredientes, uso indicado y características exactas.</p><table><tbody><tr><td>Porción</td><td>Consultar etiqueta</td></tr><tr><td>Energía</td><td>Consultar etiqueta</td></tr><tr><td>Proteínas</td><td>Consultar etiqueta</td></tr><tr><td>Carbohidratos</td><td>Consultar etiqueta</td></tr><tr><td>Grasas</td><td>Consultar etiqueta</td></tr></tbody></table><p>Información nutricional pendiente de cargar por MOVA.</p>';
+    const button=info.querySelector('.catalog-add')||info.querySelector('button[onclick*="addToCart"]');if(button){button.parentNode.insertBefore(stock,button);button.parentNode.insertBefore(detail,button)}else info.append(stock,detail);
+  });
+  window.movaDownloadStockTemplate=()=>{const names=[...new Set(cards.map(c=>c.dataset.productName).filter(Boolean))];const csv='\uFEFFproducto,stock\r\n'+names.map(n=>'"'+n.replace(/"/g,'""')+'",\r\n').join('');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='mova-stock-plantilla.csv';a.click();URL.revokeObjectURL(a.href)};
+  window.movaImportStock=event=>{const file=event.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{const rows=String(reader.result||'').replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);const sep=rows[0]?.includes(';')?';':',';const heads=rows.shift().split(sep).map(normalize);const ni=heads.findIndex(h=>['producto','nombre','product'].includes(h));const si=heads.findIndex(h=>['stock','cantidad','unidades'].includes(h));if(ni<0||si<0){document.getElementById('movaStockMessage').textContent='No se reconocieron las columnas. Usá producto y stock como encabezados.';return}rows.forEach(row=>{const cells=row.split(sep).map(v=>v.trim().replace(/^"|"$/g,''));const name=normalize(cells[ni]);const n=Number(String(cells[si]||'').replace(',','.'));if(name&&Number.isInteger(n)&&n>=0)inventory[name]=n});try{localStorage.setItem(storageKey,JSON.stringify(inventory))}catch(_){}cards.forEach(card=>{const status=card.querySelector('.mova-stock-status');const n=inventory[normalize(card.dataset.productName)];if(status&&Number.isFinite(n))status.textContent=n>0?'Stock disponible: '+n+' unidades':'Sin stock'});document.getElementById('movaStockMessage').textContent='Stock actualizado en este navegador; no modifica el inventario compartido.';event.target.value=''};reader.readAsText(file)};
+
+  document.querySelectorAll('#card1 .mova-menu-grid .menu-item').forEach(item=>{const grid=item.querySelector('.grid.grid-cols-2');if(!grid)return;const text=grid.textContent;const get=re=>Number(text.match(re)?.[1]||0);const p=get(/Prote[ií]nas\s*([\d.]+)\s*g/i),c=get(/Carbohidratos\s*([\d.]+)\s*g/i),f=get(/Grasas\s*([\d.]+)\s*g/i);const sum=p*4+c*4+f*9||1;const detail=document.createElement('details');detail.className='mova-menu-nutrition';detail.innerHTML='<summary>Ver detalle nutricional por porción</summary>';grid.parentNode.insertBefore(detail,grid);detail.append(grid);const percent=document.createElement('div');percent.className='mova-macro-percent';percent.innerHTML=[['Proteínas',p,p*4],['Carbohidratos',c,c*4],['Grasas',f,f*9]].map(x=>'<span>'+x[0]+' '+x[1]+' g · '+Math.round(x[2]/sum*100)+'%</span>').join('');detail.append(percent);const note=document.createElement('p');note.className='mova-energy-note';note.textContent='Kcal y porcentajes estimados; valores orientativos según gramaje.';detail.append(note)});
+  if(window.lucide)window.lucide.createIcons();
+})();
+</script>
+<script id="mova-cart-profile-access-fixes">
+(() => {
+  const style=document.createElement('style');
+  style.textContent=`
+    .mova-cart-checkout{max-height:48vh;overflow:auto;scrollbar-width:thin;scrollbar-color:#2a9c6b transparent}.mova-payment-option{display:flex;align-items:center;gap:.35rem;padding:.48rem;border:1px solid #ffffff1c;border-radius:.55rem;background:#ffffff08}.mova-payment-option input{accent-color:#10b981}.mova-receipt-upload{display:block;cursor:pointer;border:1px dashed #10b98188;border-radius:.7rem;padding:.62rem;color:#d9f9e8;background:#10b98112;font-size:.65rem;font-weight:800}.mova-receipt-upload input{display:block;width:100%;margin-top:.42rem;font-size:.62rem;color:#d0ddd3}
+    #card2 .mova-profile-summary{margin:0 0 1rem;padding:1rem;border:1px solid #ffffff20;border-radius:1.2rem;background:linear-gradient(125deg,rgba(14,56,39,.9),rgba(13,25,18,.9));box-shadow:0 14px 36px #0003}.mova-profile-summary h4{font-size:.72rem;font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:#8ce7b7}.mova-profile-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.7rem;margin-top:.75rem}.mova-profile-summary-card{min-width:0;padding:.75rem;border:1px solid #ffffff13;border-radius:.85rem;background:#07110ca8}.mova-profile-summary-card b{display:block;margin-bottom:.45rem;color:#f0f5ef;font-size:.75rem}.mova-profile-summary-card p{margin:.24rem 0;color:#c1cec4;font-size:.66rem;line-height:1.45;overflow-wrap:anywhere}.mova-profile-summary-card strong{color:#72e1a7;font-weight:750}.mova-profile-summary-note{margin-top:.65rem;color:#aebbb1;font-size:.6rem}.mova-profile-grid-column{min-width:0;padding:1rem;border:1px solid #ffffff14;border-radius:1rem;background:rgba(7,14,10,.45)}#card2 .profile-grid label{color:#d9e4db!important}#card2 .profile-grid input,#card2 .profile-grid select,#card2 .profile-grid textarea{min-height:42px;color:#f4f6ef!important;background:rgba(5,12,8,.88)!important;border-color:#ffffff22!important}#card2 .profile-grid input::placeholder,#card2 .profile-grid textarea::placeholder{color:#8e9c91!important}.mova-menu-photo-label{display:inline-flex;margin:.1rem 0 .45rem;padding:.25rem .45rem;border-radius:99px;background:#e4f3e4;color:#17633f;font-size:.56rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+    @media(max-width:700px){.mova-profile-summary-grid{grid-template-columns:1fr}.mova-cart-checkout{max-height:54vh}}
+  `;document.head.appendChild(style);
+  style.textContent+='#cartPanel.mova-cart-panel{overflow-y:auto;justify-content:flex-start!important;gap:1rem}#cartPanel .mova-cart-items{flex:none}#cartPanel .mova-cart-checkout{max-height:none;overflow:visible}#cartPanel #cartItemsList{max-height:40vh;overflow:auto}';
+
+  const authExtra=document.querySelector('#authModal .mt-4.pt-4.border-t.border-white\\/5.text-center');
+  if(authExtra&&!authExtra.querySelector('[onclick="continueAsGuest()"]')){
+    const guest=document.createElement('button');guest.type='button';guest.className='w-full rounded-xl border border-white/15 bg-white/5 py-2.5 text-xs font-bold text-mova-cream hover:border-mova-emerald hover:text-mova-emerald';guest.textContent='Continuar como invitado';guest.addEventListener('click',()=>window.continueAsGuest());authExtra.append(guest);
+    const hint=document.createElement('p');hint.className='mt-2 text-[10px] text-mova-muted';hint.textContent='Podés explorar MOVA sin crear una cuenta.';authExtra.append(hint);
+  }
+  const contactHint=document.querySelector('.mova-contact-hint');
+  if(contactHint)contactHint.innerHTML='<a href="https://wa.me/5492215778062" target="_blank" rel="noreferrer">WhatsApp MOVA · +54 9 221 577-8062</a><br>Instagram y dirección: datos pendientes.';
+
+  document.querySelectorAll('#card1 .mova-menu-grid').forEach(grid=>{
+    const cards=[...grid.querySelectorAll('.menu-item')];
+    cards.sort((a,b)=>{
+      const hasPhoto=card=>card.querySelector('.mova-dish-photo')?1:0;
+      const rank=hasPhoto(b)-hasPhoto(a);
+      const number=card=>Number(card.querySelector('span')?.textContent.match(/\d+/)?.[0]||0);
+      return rank||number(a)-number(b);
+    });
+    cards.forEach(card=>{
+      const photo=card.querySelector('.mova-dish-photo');
+      const label=card.querySelector('.mova-menu-photo-label');
+      if(!label){const marker=document.createElement('span');marker.className='mova-menu-photo-label';marker.textContent=photo?'Con foto':'Sin foto';card.querySelector('h4')?.before(marker)}
+      grid.append(card);
+    });
+  });
+
+  const profileCard=document.getElementById('card2');
+  const profileGrid=profileCard?.querySelector('.profile-grid');
+  if(profileCard&&profileGrid&&!profileCard.querySelector('.mova-profile-summary')){
+    const summary=document.createElement('section');summary.className='mova-profile-summary';summary.innerHTML='<h4>Tu información MOVA</h4><div class="mova-profile-summary-grid"><div class="mova-profile-summary-card"><b>Datos personales</b><p>Nombre · <strong data-summary="name">Pendiente de completar</strong></p><p>Email · <strong data-summary="email">Pendiente de completar</strong></p><p>Teléfono · <strong data-summary="phone">Pendiente de completar</strong></p><p>Entrega · <strong data-summary="address">Pendiente de completar</strong></p></div><div class="mova-profile-summary-card"><b>Perfil nutricional</b><p>Objetivo · <strong data-summary="goal">—</strong></p><p>Preferencias · <strong data-summary="diet">—</strong></p><p>Estatura · <strong data-summary="height">—</strong></p><p>Peso · <strong data-summary="weight">—</strong> · Edad · <strong data-summary="age">—</strong></p><p>Notas · <strong data-summary="notes">Ninguna</strong></p></div><div class="mova-profile-summary-card"><b>Actividad y métricas</b><p>Entrenamiento · <strong data-summary="training">—</strong></p><p>IMC estimado · <strong data-summary="bmi">—</strong></p><p>Energía diaria estimada · <strong data-summary="energy">—</strong></p><p>Proteína · <strong data-summary="protein">—</strong> · Agua · <strong data-summary="water">—</strong></p></div></div><p class="mova-profile-summary-note">Completá o ajustá los campos de abajo para actualizar este resumen. Las métricas son orientativas.</p>';
+    const avatar=profileCard.querySelector('.mova-avatar-panel');profileGrid.parentNode.insertBefore(summary,avatar||profileGrid);
+    const val=id=>document.getElementById(id)?.value?.trim()||'Pendiente de completar';
+    const selected=id=>{const el=document.getElementById(id);return el?.selectedOptions?.[0]?.textContent.trim()||'—'};
+    const set=(key,value)=>{const node=summary.querySelector('[data-summary="'+key+'"]');if(node)node.textContent=value||'—'};
+    const refresh=()=>{
+      set('name',val('profName'));set('email',val('profEmail'));set('phone',val('profPhone'));set('address',val('profAddress'));
+      set('goal',selected('profGoal'));set('diet',selected('profDiet'));set('height',document.getElementById('profHeight')?.value?document.getElementById('profHeight').value+' cm':'Pendiente');set('weight',document.getElementById('profWeight')?.value?document.getElementById('profWeight').value+' kg':'Pendiente');set('age',document.getElementById('profAge')?.value?document.getElementById('profAge').value+' años':'Pendiente');set('notes',val('profNutritionNotes')==='Pendiente de completar'?'Ninguna':val('profNutritionNotes'));
+      set('training',(document.getElementById('profTrainingDays')?.value||'—')+' días/semana · '+selected('profTrainingType')+' · '+(document.getElementById('profTrainingDuration')?.value||'—')+' min');set('bmi',document.getElementById('calcIMC')?.textContent||'—');set('energy',(document.getElementById('calcTDEE')?.textContent||'—')+' kcal/día');set('protein',document.getElementById('calcProtein')?.textContent||'—');set('water',document.getElementById('calcWater')?.textContent||'—');
+    };
+    profileCard.querySelectorAll('input,select,textarea').forEach(el=>el.addEventListener('input',()=>setTimeout(refresh,50)));profileCard.querySelectorAll('input,select,textarea').forEach(el=>el.addEventListener('change',()=>setTimeout(refresh,50)));setTimeout(refresh,100);
+  }
+  profileGrid?.querySelectorAll(':scope > div').forEach(col=>col.classList.add('mova-profile-grid-column'));
+
+  const cartPanel=document.getElementById('cartPanel');
+  if(cartPanel){cartPanel.classList.add('mova-cart-panel');const drawerContent=cartPanel.querySelector(':scope > div:first-child');drawerContent?.classList.add('mova-cart-items');}
+  const money=n=>'$'+Number(n||0).toLocaleString('es-AR');
+  window.renderCart=function(){
+    const list=document.getElementById('cartItemsList'),badge=document.getElementById('cartBadge');if(!list||!badge)return;
+    let paid=0,discount=0,count=0;list.replaceChildren();
+    if(!cart.length){list.innerHTML='<div class="text-center py-12 text-mova-muted text-xs">Tu carrito está vacío.</div>'}
+    cart.forEach((item,index)=>{
+      const line=item.price*item.qty;paid+=line;count+=item.qty;
+      const pack=String(item.title).match(/pack\s*(?:de\s*)?(5|10)/i);const regular=pack?8500*Number(pack[1]):(Number(item.regularPrice)||item.price);discount+=Math.max(0,regular-item.price)*item.qty;
+      const row=document.createElement('article');row.className='mova-cart-item';
+      const info=document.createElement('div');const title=document.createElement('h5');title.textContent=item.title;const unit=document.createElement('p');unit.textContent='Precio unitario: '+money(item.price);const lineTotal=document.createElement('strong');lineTotal.textContent=money(line);info.append(title,unit,lineTotal);
+      const controls=document.createElement('div');controls.className='mova-cart-qty';const minus=document.createElement('button');minus.type='button';minus.textContent='−';minus.setAttribute('aria-label','Quitar una unidad');minus.addEventListener('click',()=>window.updateCartQty(index,-1));const quantity=document.createElement('span');quantity.textContent=String(item.qty);const plus=document.createElement('button');plus.type='button';plus.textContent='+';plus.setAttribute('aria-label','Agregar una unidad');plus.addEventListener('click',()=>window.updateCartQty(index,1));controls.append(minus,quantity,plus);row.append(info,controls);list.append(row);
+    });
+    badge.textContent=String(count);document.getElementById('cartSubtotal').textContent=money(paid+discount);document.getElementById('cartDiscount').textContent=discount?'-'+money(discount):money(0);document.getElementById('cartTotal').textContent=money(paid);
+  };
+  window.movaReceiptSelected=event=>{const file=event.target.files?.[0],status=document.getElementById('movaReceiptStatus');if(!file){status.textContent='El comprobante se adjunta manualmente en WhatsApp.';return}if(file.size>15*1024*1024){event.target.value='';status.textContent='El archivo supera 15 MB. Elegí uno más liviano.';return}status.textContent='Comprobante seleccionado: '+file.name+' · después deberás adjuntarlo en WhatsApp.'};
+  window.movaPrepareWhatsAppReceipt=()=>{
+    if(!cart.length){alert('Agregá productos antes de continuar.');return}
+    const file=document.getElementById('movaReceiptFile')?.files?.[0];if(!file){alert('Seleccioná el comprobante. Al abrir WhatsApp, adjuntalo en el chat y confirmá el envío.');return}
+    const method=document.querySelector('input[name="movaPaymentMethod"]:checked')?.value||'Sin seleccionar';const details=cart.map(item=>item.qty+' × '+item.title+' — '+money(item.price*item.qty)).join('\n');const total=document.getElementById('cartTotal').textContent;
+    const message='Hola MOVA, quiero enviar el comprobante de mi pedido.\n\n'+details+'\n\nTotal: '+total+'\nMedio de pago: '+method+'\nArchivo seleccionado para adjuntar: '+file.name;
+    window.open('https://wa.me/5492215778062?text='+encodeURIComponent(message),'_blank','noopener,noreferrer');
+  };
+  if(window.lucide)window.lucide.createIcons();
+})();
+</script>
+<script id="mova-profile-panel-recovery">
+(() => {
+  const profile=document.getElementById('card2');
+  const grid=profile?.querySelector('.profile-grid');
+  if(!profile||!grid)return;
+  const css=document.createElement('style');
+  css.textContent=`
+    #card2 .profile-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;align-items:start!important;gap:1rem!important}
+    #card2 .profile-grid-column{height:100%;min-width:0;padding:1.1rem!important;border:1px solid rgba(255,255,255,.16)!important;border-radius:1.15rem!important;background:rgba(8,16,11,.78)!important;box-shadow:0 12px 35px rgba(0,0,0,.16)}
+    #card2 .profile-grid-column>h4,#card2 .mova-activity-panel>h4{color:#9ce8bb!important;font-size:.72rem!important;letter-spacing:.13em!important;line-height:1.45!important;text-transform:uppercase}
+    #card2 .mova-profile-nav{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1rem}
+    #card2 .mova-profile-nav button{border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:.58rem .8rem;color:#eef5ee;background:rgba(255,255,255,.07);font-size:.66rem;font-weight:800}
+    #card2 .mova-profile-nav button:hover{border-color:#34d399;color:#86efac;background:rgba(16,185,129,.13)}
+    #card2 .mova-activity-panel{grid-column:auto;min-width:0;padding:1.1rem;border:1px solid rgba(255,255,255,.16);border-radius:1.15rem;background:rgba(8,16,11,.78);box-shadow:0 12px 35px rgba(0,0,0,.16)}
+    #card2 #profileActivity{scroll-margin-top:100px}
+    #card2 #profilePersonal,#card2 #profileNutrition{scroll-margin-top:100px}
+    #card2 .profile-grid-column input,#card2 .profile-grid-column select,#card2 .profile-grid-column textarea{width:100%;box-sizing:border-box}
+    #card2 .mova-profile-summary-card p{color:#e6ece7!important}#card2 .mova-profile-summary-note{color:#dce5de!important}#card2 .mova-profile-summary-card b{color:#fff!important}
+    #card2 .profile-grid label,#card2 .profile-grid p,#card2 .profile-grid small,#card2 .profile-grid legend,#card2 .mova-activity-panel p,#card2 .mova-activity-panel label{color:#edf2ee!important}
+    #card2 .profile-grid .text-mova-muted,#card2 .mova-activity-panel .text-mova-muted{color:#d8e2da!important}
+    #card2 .profile-grid input::placeholder,#card2 .profile-grid textarea::placeholder{color:#c9d4cc!important;opacity:1}
+    #card2 .profile-grid-column>h4,#card2 .mova-activity-panel>h4{color:#c5f4d7!important}
+    @media(max-width:760px){#card2 .profile-grid{grid-template-columns:1fr!important}#card2 .mova-activity-panel{grid-column:auto}}
+  `;document.head.appendChild(css);
+  const existing=profile.querySelector('.mova-activity-panel');
+  if(!existing){
+    const days=document.getElementById('profTrainingDays');
+    const age=document.getElementById('profAge');
+    const daysCell=days?.closest('div');
+    const ageCell=age?.closest('div');
+    const ageRow=ageCell?.parentElement;
+    const activity=document.createElement('section');activity.id='profileActivity';activity.className='mova-activity-panel';activity.innerHTML='<h4 class="mb-3 border-b border-white/10 pb-2">Perfil de actividad y entrenamiento</h4><p class="mb-4 text-xs text-mova-muted">Registrá tu frecuencia, disciplina y tiempo de movimiento para dar contexto a tus objetivos.</p>';
+    if(daysCell)activity.append(daysCell);
+    const trainingType=document.getElementById('profTrainingType');
+    const trainingBlock=trainingType?.closest('.grid');
+    if(trainingBlock)activity.append(trainingBlock);
+    if(ageCell){const personal=document.getElementById('profilePersonal');personal?.append(ageCell)}
+    if(ageRow&&ageRow!==daysCell)ageRow.remove();
+    grid.insertBefore(activity,grid.children[2]||null);
+    const daysRow=daysCell?.parentElement;if(daysRow&&daysRow!==activity&&daysRow.children.length===0)daysRow.remove();
+  }
+  const summary=profile.querySelector('.mova-profile-summary');
+  const avatar=profile.querySelector('.mova-avatar-panel');
+  if(!profile.querySelector('.mova-profile-nav')){
+    const nav=document.createElement('nav');nav.className='mova-profile-nav';nav.setAttribute('aria-label','Secciones del perfil');
+    nav.innerHTML='<button type="button" onclick="movaProfileNavigate(\'personal\')">Datos personales</button><button type="button" onclick="movaProfileNavigate(\'nutrition\')">Perfil nutricional</button><button type="button" onclick="movaProfileNavigate(\'activity\')">Actividad física</button><button type="button" onclick="movaProfileNavigate(\'account\')">Avatar y cuenta</button>';
+    const anchor=summary||avatar||grid;anchor.parentNode.insertBefore(nav,anchor.nextSibling);
+  }
+  grid.querySelectorAll(':scope > div').forEach(col=>col.classList.add('mova-profile-grid-column'));
+})();
+</script>
 </body>
 </html>
 
